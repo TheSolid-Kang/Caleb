@@ -1,0 +1,135 @@
+#include "CDiaryMgr.h"
+#include "CFIOMgr.hpp"
+#include "CINIMgr.hpp"
+#include "KMP.h"
+#include "StringBuilder.h"
+#include "CMyEtc.hpp"
+
+
+CDiaryMgr::CDiaryMgr()
+{
+	initialize();
+}
+CDiaryMgr::~CDiaryMgr()
+{
+	
+}
+
+void CDiaryMgr::initialize(void)
+{
+	init_key();
+}
+
+void CDiaryMgr::init_key(void)
+{
+	//파일 명칭 다 가져오기
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	auto vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
+	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
+}
+
+bool CDiaryMgr::InitDiary(const std::string& _diary_file_path) noexcept
+{
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	if (std::string::npos  == _diary_file_path.find(diary_dir_path))
+		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
+
+	auto vec_line = CFIOMgr::GetVecFileLines(_diary_file_path);
+	StringBuilder str_buil;
+	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const std::string& _line) {str_buil.append_endl(_line); });
+
+	m_map_diary[_diary_file_path] = str_buil.str();
+
+	return true;
+}
+
+std::string CDiaryMgr::GetDiarySelectedSection(const std::string& _diary_file_path, const std::string& _section)
+{
+	//0. 
+	std::string& diary = GetDiary(_diary_file_path);
+	if (diary == "No files.")
+		return "파일이 없습니다.";
+
+	//1. Section 값 초기화
+	std::string section_begin = "<--" + _section + "-->";
+	std::string section_last = "<--End " + _section + "-->";
+
+	//2. 문자열 내 index 초기화 
+	auto index_first = diary.find(section_begin);
+	auto index_last = diary.rfind(section_last);
+	if (index_first == std::string::npos || index_last == std::string::npos)
+	{
+		//throw new std::exception("record에 존재하지 않는 section입니다.");// find 하지 못 한 문자열이 있다면 함수 종료
+		//해당 파일에 SECTION 생성
+		auto vec_section = GetVecSection();
+		auto iter = std::find(vec_section.cbegin(), vec_section.cend(), _section);
+		if (iter == vec_section.cend())//ini에 해당 section이 없다면 return;
+			return "";
+
+		//ini에 해당 sectino이 있다면 파일의 마지막 줄에 해당 section을 만든 후 return.
+		m_map_diary[_diary_file_path].append(section_begin);
+		m_map_diary[_diary_file_path].append("\n");
+		m_map_diary[_diary_file_path].append(section_last);
+		m_map_diary[_diary_file_path].append("\n");
+		m_map_diary[_diary_file_path].append("\n");
+		m_map_diary[_diary_file_path].append("\n");
+		CFIOMgr::WriteText(_diary_file_path, m_map_diary[_diary_file_path]);
+
+		return "";
+	}
+	index_first += section_begin.length();
+	index_last -= index_first;
+
+	//3. 문자열을 index 만큼 자른 후 반환
+	return diary.substr(index_first, index_last);
+
+}
+
+std::vector<std::string> CDiaryMgr::GetVecSection(void) noexcept
+{
+	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileStringA_INI("SECTION", "ARR_DIARY_SECTION");
+	return CMyEtc::Split(str_ARR_DIARY_SECTION, '|');
+}
+
+std::string& CDiaryMgr::GetDiary(const std::string& _diary_file_path)
+{
+	std::string result = "";
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	if (std::string::npos == _diary_file_path.find(diary_dir_path))
+		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
+
+	//1. 목록 내 _diary_name과 일치하는 파일이 있는지 확인
+	auto vec_file_path = CFIOMgr::GetFilesInDirectory(diary_dir_path);
+	std::vector<std::string>::const_iterator citer = std::find(vec_file_path.cbegin(), vec_file_path.cend(), _diary_file_path);
+	if (citer == vec_file_path.cend())
+	{
+		result = "No files.";
+		return result;
+	}
+	//2. 해당 key의 value가 초기화 되었는지 확인
+	if (m_map_diary[_diary_file_path]._Equal(""))
+		InitDiary(_diary_file_path);
+
+	//3. diary_name과 일치하는 파일에서 데이터 가져오기
+	return m_map_diary[_diary_file_path];
+}
+
+std::map<std::string, int> CDiaryMgr::GetMapWordCount(const std::string& _diary_file_path, const std::string& _section)
+{
+	std::string section_record = GetDiarySelectedSection(_diary_file_path, _section);
+
+
+	//praise 섹션에서 언급 단어 검색
+	std::string str_arr_keyword = CINIMgr::GetPrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD");
+	auto vec_keyword = CMyEtc::Split(str_arr_keyword, '|');
+
+	std::map<std::string, int> map_wordcount;
+	std::for_each(vec_keyword.cbegin(), vec_keyword.cend()
+		, [&](const std::string& _keyword) {
+			map_wordcount[_keyword] = (int)KMP::GetSearchedAddress(section_record, _keyword)->size();
+		});
+
+
+	return map_wordcount;
+}
+

@@ -1,0 +1,129 @@
+
+
+[DiaryForm.TXT]
+<--할 일-->
+1.
+2.
+3.
+4.
+5.
+
+<--record-->
+
+============================================================
+
+[config.ini]
+[PATH]
+DIARY_FORM_PATH=C:\Users\hoppi\Desktop\TheSolid_KANG\Project\C++_Project\Practice\x64\Debug\Form\DiaryForm.TXT
+DIARY_PATH=C:\Caleb\CalebRecord\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE twomites.FELLOWSHIP_DEPARTMENT(
+  id INT auto_increment primary KEY
+  , department NVARCHAR(128)
+);
+SELECT * FROM twomites.FELLOWSHIP_DEPARTMENT;
+INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_찬양대');
+INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_소망부');
+
+/*
+PK | FELLOWSHIP 테이블 ID
+, FK | 교제 부서 테이블 ID
+, 생성일자 
+, 간증
+*/
+CREATE TABLE twomites.FELLOWSHIP(
+  id INT auto_increment primary KEY
+  , fd_id INT
+  
+  , created_at DATETIME
+  
+  , descript LONGTEXT
+  	, foreign key (fd_id) references twomites.FELLOWSHIP_DEPARTMENT(id)
+);
+
+/* 날짜
+, 
+, 원본 사진 파일 명
+, Thumbnail 사진 파일 명
+, 원본 사진 저장 경로 
+, Thumbnail 사진 저장 경로 
+, 사진 관련 비고란
+
+*/
+CREATE TABLE twomites.FELLOWSHIP_PHOTO(
+  id INT auto_increment primary KEY
+  , f_id INT
+
+  , file_ori_name longtext
+  , file_sys_name varchar(255)
+  
+  , phto_original_file_path LONGTEXT
+  , phto_thumbnail_file_path LONGTEXT
+  
+  , note LONGTEXT
+  
+	, foreign key (f_id) references twomites.FELLOWSHIP(id)
+);
+
+/*간증
+교제_간증 id
+, FK | fellowship 테이블 id값
+, 성도명
+, 간증
+, 성별
+*/
+CREATE TABLE twomites.FELLOWSHIP_TESTIMONY(
+  id INT auto_increment primary KEY
+  , f_id INT
+  
+  , christian NVARCHAR(124)
+  , testimony LONGTEXT
+  
+  , gender tinyint(1)
+  
+	, foreign key (f_id) references twomites.FELLOWSHIP(id)
+);
+
+
+
+
+str_buil.append_endl("<--Mission-->      ");
+str_buil.append_endl("1.                 ");
+str_buil.append_endl("2.                 ");
+str_buil.append_endl("3.                 ");
+str_buil.append_endl("4.                 ");
+str_buil.append_endl("5.                 ");
+str_buil.append_endl("");
+str_buil.append_endl("<--End Mission-->  ");
+str_buil.append_endl("");
+str_buil.append_endl("<--Record-->       ");
+str_buil.append_endl("");
+str_buil.append_endl("");
+str_buil.append_endl("<--End Record-->   ");
+str_buil.append_endl("");
+str_buil.append_endl("<--The Words-->    ");
+str_buil.append_endl("");
+str_buil.append_endl("");
+str_buil.append_endl("<--End The Words-->");
