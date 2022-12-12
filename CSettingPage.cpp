@@ -56,8 +56,9 @@ void CSettingPage::DefaultSet(void)
 	CINIMgr::WritePrivateProfileStringA_INI("PATH", "CALEB_PATH", "C:\\Caleb\\Caleb");
 
 	CINIMgr::WritePrivateProfileStringA_INI("SECTION", "ARR_DIARY_SECTION", "Mission|Record|TheWords|Fellowship|Praise");
+	CINIMgr::WritePrivateProfileStringA_INI("SECTION", "ARR_CALEB_SECTION", "Caleb|Reason|Mission|Record");
 	if(CINIMgr::GetPrivateProfileStringA_INI("SEARCH","ARR_KEYWORD") == "0" )
-		CINIMgr::WritePrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD", "하나님|태경|예수님");
+		CINIMgr::WritePrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD", "아버지|태경|사랑");
 
 	//2. diary form 파일 생성
 	auto vec_section = CDiaryMgr::GetInstance().GetVecSection();

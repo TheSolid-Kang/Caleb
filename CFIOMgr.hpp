@@ -104,6 +104,7 @@ public:
 	}
 	//3. 파일 쓰기 
 	static void WriteText(std::string _path, std::string _text) {
+		//std::locale::global(std::locale("Korean"));
 		std::ofstream fout(_path, std::ios::binary);
 		if (true == fout.is_open()) {
 			fout << _text;
@@ -113,6 +114,7 @@ public:
 
 	//4. Directory 내 파일 읽기
 	static std::vector<std::string> GetVecFileLines(std::string _path) {
+		//std::locale::global(std::locale("Korean"));
 		std::locale::global(std::locale(".UTF-8"));
 
 		std::string line;
