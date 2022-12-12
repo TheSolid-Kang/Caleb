@@ -64,7 +64,6 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
     auto map_wordcount = CDiaryMgr::GetInstance().GetMapWordCount(selected_file_path, _section);
     std::cout << "=================search===================" << std::endl;
     std::cout << "section == " << _section << std::endl;
-    std::locale::global(std::locale("Korean"));
     for (std::pair<std::string, int> _pair : map_wordcount)
     {
       while (_pair.first.length() < 10) //Ä­ ¼ö ¸ÂÃß±â
