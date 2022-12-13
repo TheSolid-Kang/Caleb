@@ -11,10 +11,6 @@ CInsertPage::~CInsertPage()
 
 void CInsertPage::initialize(void)
 {
-	//CFIOMgr에서 std::locale::global(std::locale(".UTF-8"));
-	//처리 했으므로 
-	//콘솔로 한글 보려면 korean으로 변경 해야함.
-	//std::locale::global(std::locale("Korean"));
 	auto arr_note = build_array(typeid(*this).name()
 		, "1. 오늘자 일기 생성"
 		, "2. 사용자 정의 일기 생성(생성 결과 예시: 221127.TXT)"

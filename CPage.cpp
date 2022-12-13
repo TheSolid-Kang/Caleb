@@ -44,6 +44,11 @@ int CPage::Execute(int _event = 0)
 	system("cls");
 
 	initialize();
+	//CFIOMgr에서 std::locale::global(std::locale(".UTF-8"));
+	//처리 했으므로 
+	//콘솔로 한글 보려면 korean으로 변경 해야함.
+	//std::locale::global(std::locale("Korean"));
+
 	std::locale::global(std::locale("Korean"));
 	render();
 	std::locale::global(std::locale(".UTF-8"));
