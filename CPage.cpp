@@ -44,7 +44,9 @@ int CPage::Execute(int _event = 0)
 	system("cls");
 
 	initialize();
+	std::locale::global(std::locale("Korean"));
 	render();
+	std::locale::global(std::locale(".UTF-8"));
 
 	int Update = update(_event);
 

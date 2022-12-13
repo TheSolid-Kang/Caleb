@@ -13,6 +13,7 @@ enum class FILE_TYPE : int {
 	, FT_JPG
 	, FT_JPEG
 	, FT_CSV
+	, FT_MD
 	, FT_END
 };
 class CFIOMgr
@@ -44,6 +45,9 @@ private:
 		case static_cast<int>(FILE_TYPE::FT_CSV):
 			str_type = ".CSV";
 			break;
+		case static_cast<int>(FILE_TYPE::FT_MD):
+			str_type = ".MD";
+			break;
 		default:
 			str_type = ".TXT";
 			break;
@@ -56,10 +60,17 @@ public:
 	//0. 실행파일 경로 구하기
 	static std::string GetEXEFilePath() {
 		//1. 실행파일 경로 구하기 
+#if Multibyte
+		char path[MAX_PATH] = { 0, };
+		GetModuleFileName(NULL, path, MAX_PATH);
+		USES_CONVERSION;
+		std::string exe_path = path;
+#else
 		wchar_t path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
-		USES_CONVERSION;//#include <atlconv.h>
+		USES_CONVERSION;
 		std::string exe_path = W2A(path);
+#endif
 		exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
 
 		return exe_path;
@@ -104,7 +115,6 @@ public:
 	}
 	//3. 파일 쓰기 
 	static void WriteText(std::string _path, std::string _text) {
-		//std::locale::global(std::locale("Korean"));
 		std::ofstream fout(_path, std::ios::binary);
 		if (true == fout.is_open()) {
 			fout << _text;
@@ -114,13 +124,11 @@ public:
 
 	//4. Directory 내 파일 읽기
 	static std::vector<std::string> GetVecFileLines(std::string _path) {
-		//std::locale::global(std::locale("Korean"));
-		std::locale::global(std::locale(".UTF-8"));
 
 		std::string line;
 		std::vector<std::string> vec_line;
 		vec_line.reserve(1024);
-		std::ifstream fin(_path, std::ios::binary);
+		std::ifstream fin(_path);//, std::ios::binary
 
 		if (true == fin.is_open()) {
 			while (std::getline(fin, line))

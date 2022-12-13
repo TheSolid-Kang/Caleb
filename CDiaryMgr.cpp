@@ -117,9 +117,6 @@ std::string& CDiaryMgr::GetDiary(const std::string& _diary_file_path)
 std::map<std::string, int> CDiaryMgr::GetMapWordCount(const std::string& _diary_file_path, const std::string& _section)
 {
 	std::string section_record = GetDiarySelectedSection(_diary_file_path, _section);
-
-	//std::locale::global(std::locale("Korean"));
-	//std::locale::global(std::locale(".UTF-8"));
 	//praise 섹션에서 언급 단어 검색
 	std::string str_arr_keyword = CINIMgr::GetPrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD");
 	auto vec_keyword = CMyEtc::Split(str_arr_keyword, '|');

@@ -9,10 +9,17 @@ class CINIMgr {
 public:
 	static std::string GetDefaultConfigPath() {
 		//1. 실행파일 경로 구하기 
+#if Multibyte
+		char path[MAX_PATH] = { 0, };
+		GetModuleFileName(NULL, path, MAX_PATH);
+		USES_CONVERSION;
+		std::string exe_path = path;
+#else
 		wchar_t path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
 		USES_CONVERSION;
 		std::string exe_path = W2A(path);
+#endif
 		exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
 
 		//221123 삭제: 기능오류 | 모든 ini 파일이 config 폴더 안에만 생성되기에 삭제
@@ -34,6 +41,9 @@ public:
 		}
 	}
 	static std::string GetPrivateProfileStringA_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
+//#ifdef _WIN32
+//		SetConsoleOutputCP(CP_UTF8);
+//#endif
 		char szBuffer[1024] = { NULL , };
 		GetPrivateProfileStringA(_section.c_str(), _key.c_str(), "0", szBuffer, 1024, _path.c_str());
 		return szBuffer;
