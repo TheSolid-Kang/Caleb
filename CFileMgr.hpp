@@ -9,23 +9,28 @@
 class CFileMgr {
 public:
 #if UNICODE
-	static std::wstring GetOpenFileDialg() {
-		return GetOpenFileDialgW();
+	static std::string GetOpenFileDialg() {
+		std::wstring wstr_path = _GetOpenFileDialgW();
+		std::string str_path(wstr_path.begin(), wstr_path.end());
+		return str_path;
+	}
+	static std::wstring GetOpenFileDialgW() {
+		return _GetOpenFileDialgW();
 	}
 	static void ExecuteFile() {
-		ExecuteFileW();
+		_ExecuteFileW();
 	}
 #else
 	static std::string GetOpenFileDialg() {
-		return GetOpenFileDialgA();
+		return _GetOpenFileDialgA();
 	}
 	static void ExecuteFile() {
-		ExecuteFileA();
+		_ExecuteFileA();
 	}
 #endif
-
+private:
 #if UNICODE
-	static std::wstring GetOpenFileDialgW() {
+	static std::wstring _GetOpenFileDialgW() {
 		OPENFILENAME OFN;
 		TCHAR filePathName[100] = L"";
 		TCHAR lpstrFile[100] = L"";
@@ -51,7 +56,7 @@ public:
 		}
 		return L"";
 	}	
-	static void ExecuteFileW(std::wstring path = GetOpenFileDialgW()) {
+	static void _ExecuteFileW(std::wstring path = _GetOpenFileDialgW()) {
 		HWND hConsole = GetConsoleWindow();
 		ShowWindow(hConsole, SW_HIDE);
 
@@ -74,7 +79,7 @@ public:
 
 	}
 #else
-	static std::string GetOpenFileDialgA() {
+	static std::string _GetOpenFileDialgA() {
 		OPENFILENAME OFN;
 		TCHAR filePathName[100] = "";
 		TCHAR lpstrFile[100] = "";
@@ -94,13 +99,13 @@ public:
 			wsprintf(filePathName, "%s 파일을 선택하시겠습니까?", OFN.lpstrFile);
 			MessageBox(hWnd, filePathName, "열기 선택", MB_OK);
 			auto temp = OFN.lpstrFile;
-			std::string str_result(temp);//std::wstring -> std::string
+			std::string str_result(temp);//LPSTR -> std::string
 
 			return str_result;//파일 경로 담김
 		}
 		return "";
 	}
-	static void ExecuteFileA(std::string path = GetOpenFileDialgA()) {
+	static void _ExecuteFileA(std::string path = _GetOpenFileDialgA()) {
 		HWND hConsole = GetConsoleWindow();
 		ShowWindow(hConsole, SW_HIDE);
 
