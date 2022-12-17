@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="00.main">
+      <UniqueIdentifier>{e5f4fcde-16b8-48bf-aa6e-1ed490c19803}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.">
+      <UniqueIdentifier>{1dbe3413-1ce1-4bdf-bc36-499b93cfa77d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.DesignPattern">
+      <UniqueIdentifier>{534b0d61-478b-48bf-910c-3ac384ff0836}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers">
+      <UniqueIdentifier>{8e1b1757-dd62-44bd-9dc4-aa3713bdbb97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default">
+      <UniqueIdentifier>{61075305-c09d-4199-98ab-a5fba346bbd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="99.Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="99.Default\소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="99.Default\헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="01.CPage">
+      <UniqueIdentifier>{4677929c-a120-4fcf-8e3e-992ecbc79887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.CPage\00.CSelectPage">
+      <UniqueIdentifier>{51298032-0c67-4290-bab9-e78428ed4786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.CPage\01.CInsertPage">
+      <UniqueIdentifier>{735336cf-6ca5-45de-b45b-50b556d1f00a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.CPage\02.CRecordPage">
+      <UniqueIdentifier>{e93510c8-d1e5-4b76-b055-441393a59110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers\00.CFIOMgr">
+      <UniqueIdentifier>{b436a178-d98e-4d72-b61e-d75b3c1662ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers\01.CINIMgr">
+      <UniqueIdentifier>{245b9175-5fc8-4aa2-be47-d1426c0e7170}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.CPage\98.CSettingPage">
+      <UniqueIdentifier>{993abe46-36b0-4d6f-9277-dea6c04c424e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.CPage\03.CUpdatePage">
+      <UniqueIdentifier>{acc54573-1751-49be-b4ab-b95d1aba4790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="98.Headers\02.CFileMgr">
+      <UniqueIdentifier>{0c4cd631-6a89-4c93-9048-efff51365c6a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>00.main</Filter>
+    </ClCompile>
+    <ClCompile Include="CPageMgr.cpp">
+      <Filter>97.DesignPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="CPage.cpp">
+      <Filter>01.CPage</Filter>
+    </ClCompile>
+    <ClCompile Include="CRecordPage.cpp">
+      <Filter>01.CPage\02.CRecordPage</Filter>
+    </ClCompile>
+    <ClCompile Include="CInsertPage.cpp">
+      <Filter>01.CPage\01.CInsertPage</Filter>
+    </ClCompile>
+    <ClCompile Include="CSelectPage.cpp">
+      <Filter>01.CPage\00.CSelectPage</Filter>
+    </ClCompile>
+    <ClCompile Include="CSettingPage.cpp">
+      <Filter>01.CPage\98.CSettingPage</Filter>
+    </ClCompile>
+    <ClCompile Include="CDiaryMgr.cpp">
+      <Filter>97.DesignPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="CCalebMgr.cpp">
+      <Filter>97.DesignPattern</Filter>
+    </ClCompile>
+    <ClCompile Include="CUpdatePage.cpp">
+      <Filter>01.CPage\03.CUpdatePage</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CPageMgr.h">
+      <Filter>97.DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="CPage.h">
+      <Filter>01.CPage</Filter>
+    </ClInclude>
+    <ClInclude Include="Enums.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CRecordPage.h">
+      <Filter>01.CPage\02.CRecordPage</Filter>
+    </ClInclude>
+    <ClInclude Include="Values.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CIO.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CInsertPage.h">
+      <Filter>01.CPage\01.CInsertPage</Filter>
+    </ClInclude>
+    <ClInclude Include="CSelectPage.h">
+      <Filter>01.CPage\00.CSelectPage</Filter>
+    </ClInclude>
+    <ClInclude Include="CFIOMgr.hpp">
+      <Filter>98.Headers\00.CFIOMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CINIMgr.hpp">
+      <Filter>98.Headers\01.CINIMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="KMP.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="StringBuilder.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CSettingPage.h">
+      <Filter>01.CPage\98.CSettingPage</Filter>
+    </ClInclude>
+    <ClInclude Include="CDiaryMgr.h">
+      <Filter>97.DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="CCalebMgr.h">
+      <Filter>97.DesignPattern</Filter>
+    </ClInclude>
+    <ClInclude Include="CMyEtc.hpp">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CSetting.hpp">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CUpdatePage.h">
+      <Filter>01.CPage\03.CUpdatePage</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileMgr.hpp">
+      <Filter>98.Headers\02.CFileMgr</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="edit.txt">
+      <Filter>00.main</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
