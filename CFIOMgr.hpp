@@ -7,6 +7,7 @@
 #include <Windows.h>
 #include <atlconv.h>
 
+
 enum class FILE_TYPE : int {
 	FT_TXT
 	, FT_PNG
@@ -143,5 +144,7 @@ public:
 		return vec_line;
 	}
 	//5. Directory 내 파일 수정
+
+
 
 };

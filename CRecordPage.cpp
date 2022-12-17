@@ -12,6 +12,11 @@ CRecordPage::~CRecordPage()
 
 void CRecordPage::initialize(void)
 {
+  init_note();
+}
+
+void CRecordPage::init_note(void) noexcept
+{
   m_vec_file_name = CFIOMgr::GetFilesInDirectory(CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH"));
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
@@ -19,7 +24,7 @@ void CRecordPage::initialize(void)
   m_list_note.emplace_back(typeid(*this).name());
   std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const std::string& _file_name) {
     size_t index = _file_name.find_last_of("\\") + 1;
-    m_list_note.emplace_back(std::to_string(++i) + ". " + _file_name.substr(index, _file_name.size() - index) );
+    m_list_note.emplace_back(std::to_string(++i) + ". " + _file_name.substr(index, _file_name.size() - index));
     });
   m_list_note.emplace_back(std::to_string(m_vec_file_name.size() + 1) + ". EXIT");
 }

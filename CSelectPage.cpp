@@ -13,7 +13,7 @@ void CSelectPage::initialize(void)
   auto arr_page = build_array(typeid(*this).name()
     , "1. Insert Page"
     , "2. Record Page"
-    , "3. 미완_UPDATE Page"
+    , "3. Update Page"
     , "4. 미완_DELETE Page"
     , "5. Setting Page"
     , "99.EXIT");

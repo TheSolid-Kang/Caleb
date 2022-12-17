@@ -31,6 +31,7 @@ int CInsertPage::update(int _event)
 	if(selected_event > 0 && selected_event < m_list_note.size() - 1)
 		CreateDiary(selected_event);
 
+
 	return m_r_page_mgr.SetPage(static_cast<int>(PAGES::P_SELECT));
 }
 
