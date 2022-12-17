@@ -30,6 +30,6 @@ bool CCalebMgr::InitCaleb(const std::string& _diary_file_path) noexcept
 
 std::vector<std::string> CCalebMgr::GetVecSection(void) noexcept
 {
-	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileStringA_INI("SECTION", "ARR_CALEB_SECTION");
+	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileString_INI("SECTION", "ARR_CALEB_SECTION");
 	return CMyEtc::Split(str_ARR_DIARY_SECTION, '|');
 }

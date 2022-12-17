@@ -50,15 +50,15 @@ void CSettingPage::DefaultSet(void)
 {
 	//1. SET Config.INI
 	std::string exe_path = CFIOMgr::GetEXEFilePath();
-	CINIMgr::WritePrivateProfileStringA_INI("PATH", "DIARY_FORM_PATH", exe_path + "\\Form\\DiaryForm.TXT");
-	CINIMgr::WritePrivateProfileStringA_INI("PATH", "DIARY_PATH", "C:\\Caleb\\CalebRecord");
-	CINIMgr::WritePrivateProfileStringA_INI("PATH", "CALEB_FORM_PATH", exe_path + "\\Form\\CalebForm.TXT");
-	CINIMgr::WritePrivateProfileStringA_INI("PATH", "CALEB_PATH", "C:\\Caleb\\Caleb");
+	CINIMgr::WritePrivateProfileString_INI("PATH", "DIARY_FORM_PATH", exe_path + "\\Form\\DiaryForm.TXT");
+	CINIMgr::WritePrivateProfileString_INI("PATH", "DIARY_PATH", "C:\\Caleb\\CalebRecord");
+	CINIMgr::WritePrivateProfileString_INI("PATH", "CALEB_FORM_PATH", exe_path + "\\Form\\CalebForm.TXT");
+	CINIMgr::WritePrivateProfileString_INI("PATH", "CALEB_PATH", "C:\\Caleb\\Caleb");
 
-	CINIMgr::WritePrivateProfileStringA_INI("SECTION", "ARR_DIARY_SECTION", "Mission|Record|TheWords|Fellowship|Praise");
-	CINIMgr::WritePrivateProfileStringA_INI("SECTION", "ARR_CALEB_SECTION", "Caleb|Reason|Mission|Record");
-	if(CINIMgr::GetPrivateProfileStringA_INI("SEARCH","ARR_KEYWORD") == "0" )
-		CINIMgr::WritePrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD", "아버지|태경|사랑");
+	CINIMgr::WritePrivateProfileString_INI("SECTION", "ARR_DIARY_SECTION", "Mission|Record|TheWords|Fellowship|Praise");
+	CINIMgr::WritePrivateProfileString_INI("SECTION", "ARR_CALEB_SECTION", "Caleb|Reason|Mission|Record");
+	if(CINIMgr::GetPrivateProfileString_INI("SEARCH","ARR_KEYWORD") == "0" )
+		CINIMgr::WritePrivateProfileString_INI("SEARCH", "ARR_KEYWORD", "아버지|태경|사랑");
 
 	//2. diary form 파일 생성
 	auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
@@ -72,8 +72,8 @@ void CSettingPage::DefaultSet(void)
 			str_buil.append_endl("");
 			str_buil.append_endl("");
 		});
-	CFIOMgr::CreateDirectorysA(exe_path + "\\Form\\");
-	std::string diary_form_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_FORM_PATH");
+	CFIOMgr::CreateDirectorys(exe_path + "\\Form\\");
+	std::string diary_form_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_FORM_PATH");
 	CFIOMgr::WriteText(diary_form_path, str_buil.str());
 
 	//3. caleb form 파일 생성
@@ -88,15 +88,15 @@ void CSettingPage::DefaultSet(void)
 			str_buil.append_endl("");
 			str_buil.append_endl("");
 		});
-	CFIOMgr::CreateDirectorysA(exe_path + "\\Form\\");
-	std::string caleb_form_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "CALEB_FORM_PATH");
+	CFIOMgr::CreateDirectorys(exe_path + "\\Form\\");
+	std::string caleb_form_path = CINIMgr::GetPrivateProfileString_INI("PATH", "CALEB_FORM_PATH");
 	CFIOMgr::WriteText(caleb_form_path, str_buil.str());
 
 	//4. diary 파일 저장 경로 생성
-	CFIOMgr::CreateDirectorysA(CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH"));
+	CFIOMgr::CreateDirectorys(CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH"));
 
 	//5. caleb 파일 저장 경로 생성
-	CFIOMgr::CreateDirectorysA(CINIMgr::GetPrivateProfileStringA_INI("PATH", "CALEB_PATH"));
+	CFIOMgr::CreateDirectorys(CINIMgr::GetPrivateProfileString_INI("PATH", "CALEB_PATH"));
 
 
 

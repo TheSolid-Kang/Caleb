@@ -17,7 +17,7 @@ void CRecordPage::initialize(void)
 
 void CRecordPage::init_note(void) noexcept
 {
-  m_vec_file_name = CFIOMgr::GetFilesInDirectory(CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH"));
+  m_vec_file_name = CFIOMgr::GetFilesInDirectory(CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH"));
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
   int i = 0;
@@ -54,6 +54,7 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
   std::string selected_file_path = m_vec_file_name[_selected_diary - 1];
   std::cout << selected_file_path << std::endl;
   auto diary = CDiaryMgr::GetInstance().GetDiary(selected_file_path);
+  std::locale::global(std::locale("Korean"));
   std::cout << diary << std::endl;
 
   auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
@@ -71,4 +72,5 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
     }
     std::cout << "==========================================" << std::endl;
   }
+  std::locale::global(std::locale(".UTF-8"));
 }

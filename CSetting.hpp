@@ -8,10 +8,10 @@ class CSetting
 private:
 	CSetting() {
 		ExePath = CFIOMgr::GetEXEFilePath();
-		DiaryFormPath = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIRY_FORM_PATH");
-		DiaryDirPath = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIRY_PATH");
-		CalebFormPath = CINIMgr::GetPrivateProfileStringA_INI("PATH", "CALEB_FORM_PATH");
-		CalebDirPath = CINIMgr::GetPrivateProfileStringA_INI("PATH", "CALEB_PATH");
+		DiaryFormPath = CINIMgr::GetPrivateProfileString_INI("PATH", "DIRY_FORM_PATH");
+		DiaryDirPath = CINIMgr::GetPrivateProfileString_INI("PATH", "DIRY_PATH");
+		CalebFormPath = CINIMgr::GetPrivateProfileString_INI("PATH", "CALEB_FORM_PATH");
+		CalebDirPath = CINIMgr::GetPrivateProfileString_INI("PATH", "CALEB_PATH");
 	}
 public:
 	static CSetting& GetInstance(void) noexcept { static CSetting instance; return instance; }

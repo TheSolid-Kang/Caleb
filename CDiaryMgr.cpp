@@ -23,14 +23,14 @@ void CDiaryMgr::initialize(void)
 void CDiaryMgr::init_key(void)
 {
 	//파일 명칭 다 가져오기
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
 	auto vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
 }
 
 bool CDiaryMgr::InitDiary(const std::string& _diary_file_path) noexcept
 {
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
 	if (std::string::npos  == _diary_file_path.find(diary_dir_path))
 		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
 
@@ -87,14 +87,14 @@ std::string CDiaryMgr::GetDiarySelectedSection(const std::string& _diary_file_pa
 
 std::vector<std::string> CDiaryMgr::GetVecSection(void) noexcept
 {
-	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileStringA_INI("SECTION", "ARR_DIARY_SECTION");
+	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileString_INI("SECTION", "ARR_DIARY_SECTION");
 	return CMyEtc::Split(str_ARR_DIARY_SECTION, '|');
 }
 
 std::string& CDiaryMgr::GetDiary(const std::string& _diary_file_path)
 {
 	std::string result = "";
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
 	if (std::string::npos == _diary_file_path.find(diary_dir_path))
 		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
 
@@ -118,8 +118,14 @@ std::map<std::string, int> CDiaryMgr::GetMapWordCount(const std::string& _diary_
 {
 	std::string section_record = GetDiarySelectedSection(_diary_file_path, _section);
 	//praise 섹션에서 언급 단어 검색
-	std::string str_arr_keyword = CINIMgr::GetPrivateProfileStringA_INI("SEARCH", "ARR_KEYWORD");
+#if UNICODE //unicode == ANSI == W
+	std::wstring wstr_arr_keyword = CINIMgr::GetPrivateProfileStringW_INI("SEARCH", "ARR_KEYWORD");
+	USES_CONVERSION;
+	auto vec_keyword = CMyEtc::Split(W2A(wstr_arr_keyword.c_str()), '|');
+#else
+	std::string str_arr_keyword = CINIMgr::GetPrivateProfileString_INI("SEARCH", "ARR_KEYWORD");
 	auto vec_keyword = CMyEtc::Split(str_arr_keyword, '|');
+#endif
 
 	std::map<std::string, int> map_wordcount;
 	std::for_each(vec_keyword.cbegin(), vec_keyword.cend()

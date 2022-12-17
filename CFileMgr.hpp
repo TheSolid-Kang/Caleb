@@ -8,7 +8,7 @@
 
 class CFileMgr {
 public:
-#if UNICODE
+#if UNICODE //unicode == ANSI == W
 	static std::string GetOpenFileDialg() {
 		std::wstring wstr_path = _GetOpenFileDialgW();
 		std::string str_path(wstr_path.begin(), wstr_path.end());
@@ -17,8 +17,13 @@ public:
 	static std::wstring GetOpenFileDialgW() {
 		return _GetOpenFileDialgW();
 	}
-	static void ExecuteFile() {
-		_ExecuteFileW();
+
+	static void ExecuteFile(std::string _path = GetOpenFileDialg()) {
+		std::wstring wstr_path(_path.begin(), _path.end());
+		_ExecuteFileW(wstr_path);
+	}
+	static void ExecuteFileW(std::wstring _path = _GetOpenFileDialgW()) {
+		_ExecuteFileW(_path);
 	}
 #else
 	static std::string GetOpenFileDialg() {
@@ -29,7 +34,7 @@ public:
 	}
 #endif
 private:
-#if UNICODE
+#if UNICODE //unicode == ANSI == W
 	static std::wstring _GetOpenFileDialgW() {
 		OPENFILENAME OFN;
 		TCHAR filePathName[100] = L"";

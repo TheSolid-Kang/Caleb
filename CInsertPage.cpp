@@ -50,9 +50,9 @@ void CInsertPage::release(void)
 void CInsertPage::CreateDiary(int _iSelectedEvent)
 {
 	//1. 폴더 경로가 없는 경우 생성하기
-	std::string path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH");
+	std::string path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
 	if (false == std::filesystem::exists(path))
-		CFIOMgr::CreateDirectorysA(path);
+		CFIOMgr::CreateDirectorys(path);
 
 	//2. 파일 만들기
 	auto cur_time = std::chrono::system_clock::now();// 자료형 == std::chrono::system_clock::time_point
@@ -66,7 +66,7 @@ void CInsertPage::CreateDiary(int _iSelectedEvent)
 
 	//3. 양식 가져오기 
 	//  1) 양식 path 
-	std::string form_path = CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_FORM_PATH");
+	std::string form_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_FORM_PATH");
 	auto vec_line = CFIOMgr::GetVecFileLines(form_path);
 	StringBuilder str_buil_line;
 	std::for_each(vec_line.cbegin(), vec_line.cend(), [&](auto _line) {str_buil_line.append_endl(_line); });
