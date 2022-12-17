@@ -4,6 +4,7 @@
 #include "CSelectPage.h"
 #include "CInsertPage.h"
 #include "CRecordPage.h"
+#include "CUpdatePage.h"
 #include "CSettingPage.h"
 
 
@@ -37,7 +38,7 @@ int CPageMgr::SetPage(int _page)
 		m_ptr_page = new CRecordPage();
 		break;
 	case static_cast<int>(PAGES::P_UPDATE):
-		m_ptr_page = new CSelectPage();
+		m_ptr_page = new CUpdatePage();
 		break;
 	case static_cast<int>(PAGES::P_DELETE):
 		m_ptr_page = new CSelectPage();

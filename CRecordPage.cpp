@@ -15,24 +15,18 @@ void CRecordPage::initialize(void)
   m_vec_file_name = CFIOMgr::GetFilesInDirectory(CINIMgr::GetPrivateProfileStringA_INI("PATH", "DIARY_PATH"));
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
-  auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
-  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&vec_section](auto _file_path) {
-    for (auto _section : vec_section)
-      CDiaryMgr::GetInstance().GetDiarySelectedSection(_file_path, _section);
+  int i = 0;
+  m_list_note.emplace_back(typeid(*this).name());
+  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const std::string& _file_name) {
+    size_t index = _file_name.find_last_of("\\") + 1;
+    m_list_note.emplace_back(std::to_string(++i) + ". " + _file_name.substr(index, _file_name.size() - index) );
     });
+  m_list_note.emplace_back(std::to_string(m_vec_file_name.size() + 1) + ". EXIT");
 }
 
 void CRecordPage::render(void)
 {
-  int i = 0;
-
-  auto map_diary = CDiaryMgr::GetInstance().GetMapDiary();
-  std::cout << typeid(*this).name() << std::endl;
-  std::for_each(map_diary.rbegin(), map_diary.rend(), [&i](std::pair<const std::string, std::string>& _pair) {
-    size_t index = _pair.first.find_last_of("\\") + 1;
-    std::cout << std::to_string(++i) + ". " + _pair.first.substr(index, _pair.first.size() - index) << std::endl;
-    });
-  std::cout << m_vec_file_name.size() + 1 << ". EXIT" << std::endl;
+  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const std::string& _title) {std::cout << _title << std::endl; });
 }
 
 int CRecordPage::update(int _event)
