@@ -108,6 +108,7 @@ public:
 	static void CreateDirectorys(std::string _path) {
 		_CreateDirectorysA(_path);
 	}
+	//4. Directory 내 파일 읽기
 	static std::vector<std::string> GetVecFileLines(std::string _path) {;
 		return _GetVecFileLinesA(_path);
 	}

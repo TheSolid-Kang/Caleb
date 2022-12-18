@@ -87,7 +87,7 @@ std::string CInsertPage::CreateName(int _iSelectedEvent)
 		auto cur_time = std::chrono::system_clock::now();// 자료형 == std::chrono::system_clock::time_point
 		std::time_t t_cur_time = std::chrono::system_clock::to_time_t(cur_time);
 		struct tm t_tm = *localtime(&t_cur_time);
-
+		
 	switch (_iSelectedEvent)
 	{
 	case 1: //오늘자 일기 생성
