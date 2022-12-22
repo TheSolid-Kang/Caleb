@@ -37,6 +37,7 @@ void CPage::release(void)
 }
 
 int CPage::Execute(int _event = 0)
+
 {
 	_CrtDumpMemoryLeaks();
 
