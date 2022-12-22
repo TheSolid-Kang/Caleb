@@ -18,7 +18,7 @@ void CRecordPage::initialize(void)
   std::for_each(m_list_note.begin(), m_list_note.end(), [&i](std::string& _note) { _note = std::to_string(i++) + ". " + _note; });
 
   m_list_note.emplace_front(typeid(*this).name());
-  m_list_note.emplace_back(std::to_string(m_list_note.size() + 1) + ". EXIT");
+  m_list_note.emplace_back("99. EXIT");
 }
 
 void CRecordPage::init_note(void) noexcept
@@ -49,8 +49,7 @@ int CRecordPage::update(int _event)
   auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
   if(EXIT == selectedDiarySection)
     return m_r_page_mgr.SetPage(static_cast<int>(PAGES::P_SELECT));
-
-  if(0 > selectedDiarySection || selectedDiarySection > vec_section.size())
+  else if(0 > selectedDiarySection || selectedDiarySection > vec_section.size())
     return m_r_page_mgr.SetPage(static_cast<int>(PAGES::P_RECORD));
 
   m_strDiarySection = vec_section[selectedDiarySection];
@@ -77,6 +76,7 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
   std::string selected_file_path = m_vec_file_name[_selected_diary - 1];
   std::cout << selected_file_path << std::endl;
   //auto diary = CDiaryMgr::GetInstance().GetDiary(selected_file_path);
+
   auto diary = CDiaryMgr::GetInstance().GetDiarySelectedSection(selected_file_path, m_strDiarySection);
   std::locale::global(std::locale("Korean"));
   std::cout << diary << std::endl;
