@@ -2,10 +2,17 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <tchar.h>
+
+#if UNICODE 
+using MyString = std::wstring;
+#else
+using MyString = std::string;
+#endif;
 class KMP
 {
 private:
-	static std::unique_ptr<std::vector<int> > get_pi(const std::string& _strSearchKey) {
+	static std::unique_ptr<std::vector<int> > get_pi(const MyString& _strSearchKey) {
 		int j = 0;
 		int iSearchKeySize = (int)_strSearchKey.size();
 		std::unique_ptr<std::vector<int> > uniq_vec_pi = std::make_unique<std::vector<int>>(iSearchKeySize, 0);
@@ -21,7 +28,7 @@ private:
 	}
 
 public:
-	static std::unique_ptr<std::vector<int> > GetSearchedAddress(const std::string& _strText, const std::string& _strSearchKey) {
+	static std::unique_ptr<std::vector<int> > GetSearchedAddress(const MyString& _strText, const MyString& _strSearchKey) {
 		int j = 0;
 		int iTextSize = (int)_strText.size();
 		int iSearchKeySize = (int)_strSearchKey.size();

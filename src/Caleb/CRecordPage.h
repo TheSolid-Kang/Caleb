@@ -7,8 +7,8 @@ public:
 	~CRecordPage();
 
 private:
-	std::vector<std::string> m_vec_file_name;
-	std::string m_strDiarySection;
+	std::vector<MyString> m_vec_file_name;
+	MyString m_strDiarySection;
 
 private:
 	// CPage을(를) 통해 상속됨

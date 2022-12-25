@@ -1,103 +1,43 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <tchar.h>
 #include <Windows.h>
 #include <atlconv.h>
 #include <filesystem>
+#if UNICODE 
+using MyString = std::wstring;
+#else
+using MyString = std::string;
+#endif;
+
+#define DEF_CAP 2048
 
 class CINIMgr {
 public:
-#if UNICODE //unicode == ANSI == W
-	static std::string GetDefaultConfigPath() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		std::wstring wstr = _GetDefaultConfigPathW();
-		return std::string(wstr.begin(), wstr.end());
-	}
-	static std::wstring GetDefaultConfigPathW() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		return _GetDefaultConfigPathW();
-	}
-	static void WritePrivateProfileString_INI(std::string _section, std::string _key, std::string _value, std::string _path = "") {
-		_WritePrivateProfileStringW_INI(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
-	}
-	static std::string GetPrivateProfileString_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
-		return  _GetPrivateProfileStringA_INI(_section.c_str(), _key.c_str(), _path.c_str());
-	}
-	static std::wstring GetPrivateProfileStringW_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
-		return  _GetPrivateProfileStringW_INI(_section.c_str(), _key.c_str(), _path.c_str());
-	}
-#else
-	static std::string GetDefaultConfigPath() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		return _GetDefaultConfigPathA();
-	}
-	static void WritePrivateProfileString_INI(std::string _section, std::string _key, std::string _value, std::string _path = "") {
-		_WritePrivateProfileStringA_INI(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
-	}
-	static std::string GetPrivateProfileString_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
-		return  _GetPrivateProfileStringA_INI(_section.c_str(), _key.c_str(), _path.c_str());
-	}
-#endif
+	static MyString _GetDefaultConfigPath() {
+		//1. ì‹¤í–‰íŒŒì¼ ê²½ë¡œ êµ¬í•˜ê¸° 
+		TCHAR path[MAX_PATH] = { 0, };
+		GetModuleFileName(NULL, path, MAX_PATH);
+		MyString exe_path = path;
+		exe_path = exe_path.substr(0, exe_path.find_last_of(_T("\\/")));
 
-private:
-	static std::wstring _GetDefaultConfigPathW() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		wchar_t path[MAX_PATH] = { 0, };
-		GetModuleFileNameW(NULL, path, MAX_PATH);
-		std::wstring exe_path = path;
-		exe_path = exe_path.substr(0, exe_path.find_last_of(L"\\/"));
-
-		//221123 »èÁ¦: ±â´É¿À·ù | ¸ğµç ini ÆÄÀÏÀÌ config Æú´õ ¾È¿¡¸¸ »ı¼ºµÇ±â¿¡ »èÁ¦
-		exe_path += L"\\configINI";//Æú´õ¸í
-		if (false == std::filesystem::exists(exe_path)) //Æú´õ°¡ ¾ø´Ù¸é ¸¸µç´Ù.
+		//221123 ì‚­ì œ: ê¸°ëŠ¥ì˜¤ë¥˜ | ëª¨ë“  ini íŒŒì¼ì´ config í´ë” ì•ˆì—ë§Œ ìƒì„±ë˜ê¸°ì— ì‚­ì œ
+		exe_path += _T("\\configINI");//í´ë”ëª…
+		if (false == std::filesystem::exists(exe_path)) //í´ë”ê°€ ì—†ë‹¤ë©´ ë§Œë“ ë‹¤.
 			std::filesystem::create_directory(exe_path);
-		exe_path += L"\\config.ini";//ini ÆÄÀÏ ¸í
+		exe_path += _T("\\config.ini");//ini íŒŒì¼ ëª…
 
 		return exe_path;
 	}
-	static void _WritePrivateProfileStringW_INI(std::string _section, std::string _key, std::string _value, std::string _path = "") {
-		USES_CONVERSION;
-		if (_path != "")
-			WritePrivateProfileStringW(A2W(_section.c_str()), A2W(_key.c_str()), A2W(_value.c_str()), A2W(_path.c_str()));
-		else {
-			std::wstring exe_path = _GetDefaultConfigPathW();
-			WritePrivateProfileStringW(A2W(_section.c_str()), A2W(_key.c_str()), A2W(_value.c_str()), exe_path.c_str());
-		}
+	static void _WritePrivateProfileString_INI(MyString _section, MyString _key, MyString _value, MyString _path = _GetDefaultConfigPath()) {
+		WritePrivateProfileString(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
 	}
-	static std::wstring _GetPrivateProfileStringW_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
-		USES_CONVERSION;
-		wchar_t szBuffer[1024] = { NULL , };
-		GetPrivateProfileStringW(A2W(_section.c_str()), A2W(_key.c_str()), L"0", szBuffer, 1024, A2W(_path.c_str()));
-		std::wstring wstr(szBuffer);
+	static MyString _GetPrivateProfileString_INI(MyString _section, MyString _key, MyString _path = _GetDefaultConfigPath()) {
+		TCHAR szBuffer[DEF_CAP] = { NULL , };
+		GetPrivateProfileString(_section.c_str(), _key.c_str(), _T("0"), szBuffer, 1024, _path.c_str());
+		MyString wstr(szBuffer);
 		return wstr;
 	}
-	
-	static std::string _GetDefaultConfigPathA() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		char path[MAX_PATH] = { 0, };
-		GetModuleFileNameA(NULL, path, MAX_PATH);
-		std::string exe_path = path;
-		exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
 
-		//221123 »èÁ¦: ±â´É¿À·ù | ¸ğµç ini ÆÄÀÏÀÌ config Æú´õ ¾È¿¡¸¸ »ı¼ºµÇ±â¿¡ »èÁ¦
-		exe_path += "\\configINI";//Æú´õ¸í
-		if (false == std::filesystem::exists(exe_path)) //Æú´õ°¡ ¾ø´Ù¸é ¸¸µç´Ù.
-			std::filesystem::create_directory(exe_path);
-		exe_path += "\\config.ini";//ini ÆÄÀÏ ¸í
-
-		return exe_path;
-	}
-	static void _WritePrivateProfileStringA_INI(std::string _section, std::string _key, std::string _value, std::string _path = "") {
-		if (_path != "")
-			WritePrivateProfileStringA(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
-		else {
-			std::string exe_path = GetDefaultConfigPath();
-			WritePrivateProfileStringA(_section.c_str(), _key.c_str(), _value.c_str(), exe_path.c_str());
-		}
-	}
-	static std::string _GetPrivateProfileStringA_INI(std::string _section, std::string _key, std::string _path = GetDefaultConfigPath()) {
-		char szBuffer[1024] = { NULL , };
-		GetPrivateProfileStringA(_section.c_str(), _key.c_str(), "0", szBuffer, 1024, _path.c_str());
-		return szBuffer;
-	}
 };

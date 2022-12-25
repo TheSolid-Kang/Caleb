@@ -22,114 +22,108 @@ void CDiaryMgr::initialize(void)
 
 void CDiaryMgr::init_key(void)
 {
-	//ÆÄÀÏ ¸íÄª ´Ù °¡Á®¿À±â
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
-	auto vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Äª ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	MyString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	std::vector<MyString> vec_file_name = CFIOMgr::_GetFilesInDirectory(diary_dir_path);
 	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
 }
 
-bool CDiaryMgr::InitDiary(const std::string& _diary_file_path) noexcept
+bool CDiaryMgr::InitDiary(const MyString& _diary_file_path) noexcept
 {
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
-	if (std::string::npos  == _diary_file_path.find(diary_dir_path))
-		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
+	MyString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	if (MyString::npos  == _diary_file_path.find(diary_dir_path))
+		const_cast<MyString&>(_diary_file_path).append(_T("\\") + _diary_file_path);
 
-	auto vec_line = CFIOMgr::GetVecFileLines(_diary_file_path);
+	auto vec_line = CFIOMgr::_GetVecFileLines(_diary_file_path);
 	StringBuilder str_buil;
-	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const std::string& _line) {str_buil.append_endl(_line); });
+	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const MyString& _line) {str_buil.append_endl(_line); });
 
 	m_map_diary[_diary_file_path] = str_buil.str();
 
 	return true;
 }
 
-std::string CDiaryMgr::GetDiarySelectedSection(const std::string& _diary_file_path, const std::string& _section)
+MyString CDiaryMgr::GetDiarySelectedSection(const MyString& _diary_file_path, const MyString& _section)
 {
 	//0. 
-	std::string& diary = GetDiary(_diary_file_path);
-	if (diary == "No files.")
-		return "ÆÄÀÏÀÌ ¾ø½À´Ï´Ù.";
+	MyString& diary = GetDiary(_diary_file_path);
+	if (diary == _T("No files."))
+		return _T("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
-	//1. Section °ª ÃÊ±âÈ­
-	std::string section_begin = "<--" + _section + "-->";
-	std::string section_last = "<--End " + _section + "-->";
+	//1. Section ï¿½ï¿½ ï¿½Ê±ï¿½È­
+	MyString section_begin = _T("<--") + _section + _T("-->");
+	MyString section_last = _T("<--End ") + _section + _T("-->");
 
-	//2. ¹®ÀÚ¿­ ³» index ÃÊ±âÈ­ 
+	//2. ï¿½ï¿½ï¿½Ú¿ï¿½ ï¿½ï¿½ index ï¿½Ê±ï¿½È­ 
 	auto index_first = diary.find(section_begin);
 	auto index_last = diary.rfind(section_last);
-	if (index_first == std::string::npos || index_last == std::string::npos)
+	if (index_first == MyString::npos || index_last == MyString::npos)
 	{
-		//throw new std::exception("record¿¡ Á¸ÀçÇÏÁö ¾Ê´Â sectionÀÔ´Ï´Ù.");// find ÇÏÁö ¸ø ÇÑ ¹®ÀÚ¿­ÀÌ ÀÖ´Ù¸é ÇÔ¼ö Á¾·á
-		//ÇØ´ç ÆÄÀÏ¿¡ SECTION »ý¼º
+		//throw new std::exception("recordï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ sectionï¿½Ô´Ï´ï¿½.");// find ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+		//ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ SECTION ï¿½ï¿½ï¿½ï¿½
 		auto vec_section = GetVecSection();
 		auto iter = std::find(vec_section.cbegin(), vec_section.cend(), _section);
-		if (iter == vec_section.cend())//ini¿¡ ÇØ´ç sectionÀÌ ¾ø´Ù¸é return;
-			return "";
+		if (iter == vec_section.cend())//iniï¿½ï¿½ ï¿½Ø´ï¿½ sectionï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ return;
+			return _T("");
 
-		//ini¿¡ ÇØ´ç sectinoÀÌ ÀÖ´Ù¸é ÆÄÀÏÀÇ ¸¶Áö¸· ÁÙ¿¡ ÇØ´ç sectionÀ» ¸¸µç ÈÄ return.
+		//iniï¿½ï¿½ ï¿½Ø´ï¿½ sectinoï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½ ï¿½Ø´ï¿½ sectionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ return.
 		m_map_diary[_diary_file_path].append(section_begin);
-		m_map_diary[_diary_file_path].append("\n");
+		m_map_diary[_diary_file_path].append(_T("\n"));
 		m_map_diary[_diary_file_path].append(section_last);
-		m_map_diary[_diary_file_path].append("\n");
-		m_map_diary[_diary_file_path].append("\n");
-		m_map_diary[_diary_file_path].append("\n");
-		CFIOMgr::WriteText(_diary_file_path, m_map_diary[_diary_file_path]);
+		m_map_diary[_diary_file_path].append(_T("\n"));
+		m_map_diary[_diary_file_path].append(_T("\n"));
+		m_map_diary[_diary_file_path].append(_T("\n"));
+		CFIOMgr::_WriteText(_diary_file_path, m_map_diary[_diary_file_path]);
 
-		return "";
+		return _T("");
 	}
 	index_first += section_begin.length();
 	index_last -= index_first;
 
-	//3. ¹®ÀÚ¿­À» index ¸¸Å­ ÀÚ¸¥ ÈÄ ¹ÝÈ¯
+	//3. ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½ï¿½ index ï¿½ï¿½Å­ ï¿½Ú¸ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯
 	return diary.substr(index_first, index_last);
 
 }
 
-std::vector<std::string> CDiaryMgr::GetVecSection(void) noexcept
+std::vector<MyString> CDiaryMgr::GetVecSection(void) noexcept
 {
-	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileString_INI("SECTION", "ARR_DIARY_SECTION");
-	return CMyEtc::Split(str_ARR_DIARY_SECTION, '|');
+	MyString str_ARR_DIARY_SECTION = CINIMgr::_GetPrivateProfileString_INI(_T("SECTION"), _T("ARR_DIARY_SECTION"));
+	return CMyEtc::Split(str_ARR_DIARY_SECTION, _T('|'));
 }
 
-std::string& CDiaryMgr::GetDiary(const std::string& _diary_file_path)
+MyString& CDiaryMgr::GetDiary(const MyString& _diary_file_path)
 {
-	std::string result = "";
-	std::string diary_dir_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
-	if (std::string::npos == _diary_file_path.find(diary_dir_path))
-		const_cast<std::string&>(_diary_file_path).append("\\" + _diary_file_path);
+	MyString result = _T("");
+	MyString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	if (MyString::npos == _diary_file_path.find(diary_dir_path))
+		const_cast<MyString&>(_diary_file_path).append(_T("\\") + _diary_file_path);
 
-	//1. ¸ñ·Ï ³» _diary_name°ú ÀÏÄ¡ÇÏ´Â ÆÄÀÏÀÌ ÀÖ´ÂÁö È®ÀÎ
-	auto vec_file_path = CFIOMgr::GetFilesInDirectory(diary_dir_path);
-	std::vector<std::string>::const_iterator citer = std::find(vec_file_path.cbegin(), vec_file_path.cend(), _diary_file_path);
+	//1. ï¿½ï¿½ï¿½ ï¿½ï¿½ _diary_nameï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+	auto vec_file_path = CFIOMgr::_GetFilesInDirectory(diary_dir_path);
+	std::vector<MyString>::const_iterator citer = std::find(vec_file_path.cbegin(), vec_file_path.cend(), _diary_file_path);
 	if (citer == vec_file_path.cend())
 	{
-		result = "No files.";
+		result = _T("No files.");
 		return result;
 	}
-	//2. ÇØ´ç keyÀÇ value°¡ ÃÊ±âÈ­ µÇ¾ú´ÂÁö È®ÀÎ
-	if (m_map_diary[_diary_file_path]._Equal(""))
+	//2. ï¿½Ø´ï¿½ keyï¿½ï¿½ valueï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+	if (m_map_diary[_diary_file_path]._Equal(_T("")))
 		InitDiary(_diary_file_path);
 
-	//3. diary_name°ú ÀÏÄ¡ÇÏ´Â ÆÄÀÏ¿¡¼­ µ¥ÀÌÅÍ °¡Á®¿À±â
+	//3. diary_nameï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	return m_map_diary[_diary_file_path];
 }
 
-std::map<std::string, int> CDiaryMgr::GetMapWordCount(const std::string& _diary_file_path, const std::string& _section)
+std::map<MyString, int> CDiaryMgr::GetMapWordCount(const MyString& _diary_file_path, const MyString& _section)
 {
-	std::string section_record = GetDiarySelectedSection(_diary_file_path, _section);
-	//praise ¼½¼Ç¿¡¼­ ¾ð±Þ ´Ü¾î °Ë»ö
-#if UNICODE //unicode == ANSI == W
-	std::wstring wstr_arr_keyword = CINIMgr::GetPrivateProfileStringW_INI("SEARCH", "ARR_KEYWORD");
-	USES_CONVERSION;
-	auto vec_keyword = CMyEtc::Split(W2A(wstr_arr_keyword.c_str()), '|');
-#else
-	std::string str_arr_keyword = CINIMgr::GetPrivateProfileString_INI("SEARCH", "ARR_KEYWORD");
-	auto vec_keyword = CMyEtc::Split(str_arr_keyword, '|');
-#endif
+	MyString section_record = GetDiarySelectedSection(_diary_file_path, _section);
+	//praise ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ü¾ï¿½ ï¿½Ë»ï¿½
+	MyString wstr_arr_keyword = CINIMgr::_GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
+	auto vec_keyword = CMyEtc::Split(wstr_arr_keyword, _T('|'));
 
-	std::map<std::string, int> map_wordcount;
+	std::map<MyString, int> map_wordcount;
 	std::for_each(vec_keyword.cbegin(), vec_keyword.cend()
-		, [&](const std::string& _keyword) {
+		, [&](const MyString& _keyword) {
 			map_wordcount[_keyword] = (int)KMP::GetSearchedAddress(section_record, _keyword)->size();
 		});
 

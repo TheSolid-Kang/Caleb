@@ -2,11 +2,28 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <tchar.h>
 #include <vector>
 #include <filesystem>
 #include <Windows.h>
 #include <atlconv.h>
+#if UNICODE 
+using MyString = std::wstring;
+using tifstream = std::wifstream;
+using tofstream = std::wofstream;
+#define tcout  wcout
+#define tcin  wcin
+#else
+using MyString = std::string;
+using tifstream = std::ifstream;
+using tofstream = std::ofstream;
+#define tcout  cout
+#define tcin  wcin
+#endif;
 
+
+
+#define DEF_CAP 2048
 enum class FILE_TYPE : int {
 	FT_TXT
 	, FT_PNG
@@ -18,233 +35,127 @@ enum class FILE_TYPE : int {
 };
 class CFIOMgr
 {
+	//1. Directory ë‚´ íŒŒì¼ ìƒì„±
+//2. Directory ë‚´ íŒŒì¼ ëª©ë¡ ì¶œë ¥
+//3. íŒŒì¼ ì“°ê¸° 
+//4. Directory ë‚´ íŒŒì¼ ì½ê¸°
+//5. Directory ë‚´ íŒŒì¼ ìˆ˜ì •
 public:
-	//1. Directory ³» ÆÄÀÏ »ı¼º
-	//2. Directory ³» ÆÄÀÏ ¸ñ·Ï Ãâ·Â
-	//3. ÆÄÀÏ ¾²±â 
-	//4. Directory ³» ÆÄÀÏ ÀĞ±â
-	//5. Directory ³» ÆÄÀÏ ¼öÁ¤
-private:
-	static std::string GetFileType(int _file_type)
+	static MyString _GetFileType(int _file_type)
 	{
-		std::string str_type = "";
+		MyString str_type = _T("");
 		switch (_file_type)
 		{
 		case static_cast<int>(FILE_TYPE::FT_TXT):
-			str_type = ".TXT";
+			str_type = _T(".TXT");
 			break;
 		case static_cast<int>(FILE_TYPE::FT_PNG):
-			str_type = ".PNG";
+			str_type = _T(".PNG");
 			break;
 		case static_cast<int>(FILE_TYPE::FT_JPG):
-			str_type = ".JPG";
+			str_type = _T(".JPG");
 			break;
 		case static_cast<int>(FILE_TYPE::FT_JPEG):
-			str_type = ".JPEG";
+			str_type = _T(".JPEG");
 			break;
 		case static_cast<int>(FILE_TYPE::FT_CSV):
-			str_type = ".CSV";
+			str_type = _T(".CSV");
 			break;
 		case static_cast<int>(FILE_TYPE::FT_MD):
-			str_type = ".MD";
+			str_type = _T(".MD");
 			break;
 		default:
-			str_type = ".TXT";
+			str_type = _T(".TXT");
 			break;
 		}
 
 		return str_type;
 	}
 
-public:
-#if UNICODE //unicode == ANSI == W
-	//0. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â
-	static std::string GetEXEFilePath() {
-		std::wstring wstr_exe_path = _GetEXEFilePathW();
-		std::string exe_path(wstr_exe_path.begin(), wstr_exe_path.end());
+
+	//0. ì‹¤í–‰íŒŒì¼ ê²½ë¡œ êµ¬í•˜ê¸°
+	static MyString _GetEXEFilePath() {
+		//1. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½ 
+		TCHAR path[MAX_PATH] = { 0, };
+		GetModuleFileName(NULL, path, MAX_PATH);
+		MyString exe_path = path;
+		exe_path = exe_path.substr(0, exe_path.find_last_of(_T("\\/")));
 		return exe_path;
 	}
-	static std::wstring GetEXEFilePathW() {
-		std::wstring wstr_exe_path = _GetEXEFilePathW();
-		return wstr_exe_path;
-	}
-	
-	//1-2. Directory ³» ÇÏÀ§ Æú´õ Â÷·Ê´ë·Î »ı¼º
-	static void CreateDirectorys(std::string _path) {
-		_CreateDirectorysW(_path);
-	}
-	//4. Directory ³» ÆÄÀÏ ÀĞ±â
-	static std::vector<std::string> GetVecFileLines(std::string _path) {
-		std::vector<std::wstring> vec_wline = _GetVecFileLinesW(_path);
-		std::vector<std::string> vec_line;
-		std::for_each(vec_wline.begin(), vec_wline.end(), [&vec_line](std::wstring& _wstr_line) {
-			//1¹ø
-			//std::string str_line;
-			//str_line.assign(_wstr_line.begin(), _wstr_line.end());
-			//vec_line.emplace_back(str_line);
 
-			//2¹ø
-			//vec_line.emplace_back(std::string(_wstr_line.begin(), _wstr_line.end()));
+	//1-2. Directory ë‚´ í•˜ìœ„ í´ë” ì°¨ë¡€ëŒ€ë¡œ ìƒì„±
+	static void _CreateDirectorys(const MyString& _path) {
+		MyString path(_path.begin(), _path.end());
+		TCHAR arr_dir_name[256];
+		TCHAR* ch_ptr_path = const_cast<TCHAR*>(path.c_str());
+		TCHAR* ch_ptr_dirname = arr_dir_name;
 
-			//3¹ø
-			USES_CONVERSION;
-			vec_line.emplace_back(W2A(_wstr_line.c_str()));
-			});
-		vec_line.shrink_to_fit();
-		return vec_line;
-		//return _GetVecFileLinesA(_path);
-	}
-	static std::vector<std::wstring> GetVecFileLinesW(std::string _path) {
-		return _GetVecFileLinesW(_path);
+		while (*ch_ptr_path) {
+			if ((_T('\\') == *ch_ptr_path) || (_T('/') == *ch_ptr_path)) {
+				if (_T(':') != *(ch_ptr_path - 1))
+					CreateDirectory(arr_dir_name, NULL);
+			}
+			*ch_ptr_dirname++ = *ch_ptr_path++;
+			*ch_ptr_dirname = _T('\0');
+		}
+		CreateDirectory(arr_dir_name, NULL);
 	}
 
-#else
-	//0. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â
-	static std::string GetEXEFilePath() {
-		std::string str_exe_path = _GetEXEFilePathA();
-		return str_exe_path;
-	}
-	//1-2. Directory ³» ÇÏÀ§ Æú´õ Â÷·Ê´ë·Î »ı¼º
-	static void CreateDirectorys(std::string _path) {
-		_CreateDirectorysA(_path);
-	}
-	//4. Directory ³» ÆÄÀÏ ÀĞ±â
-	static std::vector<std::string> GetVecFileLines(std::string _path) {;
-		return _GetVecFileLinesA(_path);
-	}
+	//1. Directory ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	static void _CreateNewFile(MyString _path, MyString _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
+		if (std::string::npos == _file_name.find(_T(".")))//npos == find ê²°ê³¼ê°€ ì—†ëŠ” ê²½ìš°
+			_file_name += _GetFileType(_file_type);
+		MyString file_path = _path + _file_name;
+		tofstream fout = tofstream(file_path);//íŒŒì¼ ì—´ê¸°_ë§Œì•½ íŒŒì¼ì´ ì—†ìœ¼ë©´ ë§Œë“¦.
 
-#endif
-	//1. Directory ³» ÆÄÀÏ »ı¼º
-	static void CreateNewFile(std::string _path, std::string _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
-		if (std::string::npos == _file_name.find("."))//npos == find °á°ú°¡ ¾ø´Â °æ¿ì
-			_file_name += GetFileType(_file_type);
-		std::string file_path = _path + _file_name;
-		std::ofstream fout = std::ofstream(file_path);//ÆÄÀÏ ¿­±â_¸¸¾à ÆÄÀÏÀÌ ¾øÀ¸¸é ¸¸µê.
-		std::cout << "fout.is_open() == " << fout.is_open() << std::endl;
+		std::tcout << _T("fout.is_open() == ") << fout.is_open() << std::endl;
 		if (true == fout.is_open())
 			fout.close();
 	}
 
-	//2. Directory ³» ÆÄÀÏ ¸ñ·Ï Ãâ·Â
-	static std::vector<std::string> GetFilesInDirectory(std::string _path) {
-		std::vector<std::string> vec_files ;
+	//2. Directory ë‚´ íŒŒì¼ ëª©ë¡ ì¶œë ¥
+	static std::vector<MyString> _GetFilesInDirectory(MyString& _path) {
+		std::vector<MyString> vec_files;
 		vec_files.reserve(1024);
 		auto iter = std::filesystem::directory_iterator(_path);
-		while (true != iter._At_end())
-			vec_files.emplace_back((*iter++).path().string());//std::filesystem::path -> std::string À¸·Î º¯È¯
+		while (true != iter._At_end()) {
+#if UNICODE 
+			vec_files.emplace_back((*iter++).path().wstring());//std::filesystem::path -> std::string ìœ¼ë¡œ ë³€í™˜
+#else
+			vec_files.emplace_back((*iter++).path().string());//std::filesystem::path -> std::string ìœ¼ë¡œ ë³€í™˜
+#endif;
+		}
 		vec_files.shrink_to_fit();
 		return vec_files;
 	}
-	//3. ÆÄÀÏ ¾²±â 
-	static void WriteText(std::string _path, std::string _text) {
-		std::ofstream fout(_path, std::ios::binary);
+	//3. íŒŒì¼ ì“°ê¸° 
+	static void _WriteText(const MyString& _path, const MyString& _text) {
+		tofstream fout = tofstream(_path, std::ios::binary);//íŒŒì¼ ì—´ê¸°_ë§Œì•½ íŒŒì¼ì´ ì—†ìœ¼ë©´ ë§Œë“¦.
+
 		if (true == fout.is_open()) {
 			fout << _text;
 			fout.close();
 		}
 	}
-
-	//5. Directory ³» ÆÄÀÏ ¼öÁ¤
-
-
-private:
-#if UNICODE //unicode == ANSI == W
-	//1-2. Directory ³» ÇÏÀ§ Æú´õ Â÷·Ê´ë·Î »ı¼º
-	static void _CreateDirectorysW(std::string _path) {
-		std::wstring path(_path.begin(), _path.end());
-		wchar_t arr_dir_name[256];
-		wchar_t* ch_ptr_path = const_cast<wchar_t*>(path.c_str());
-		wchar_t* ch_ptr_dirname = arr_dir_name;
-
-		while (*ch_ptr_path) {
-			if (('\\' == *ch_ptr_path) || ('/' == *ch_ptr_path)) {
-				if (':' != *(ch_ptr_path - 1))
-					::CreateDirectoryW(arr_dir_name, NULL);
-			}
-			*ch_ptr_dirname++ = *ch_ptr_path++;
-			*ch_ptr_dirname = '\0';
-		}
-		::CreateDirectoryW(arr_dir_name, NULL);
-
-	}
-	static std::wstring _GetEXEFilePathW() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		wchar_t path[MAX_PATH] = { 0, };
-		GetModuleFileNameW(NULL, path, MAX_PATH);
-		USES_CONVERSION;
-		std::wstring exe_path = path;
-
-		exe_path = exe_path.substr(0, exe_path.find_last_of(L"\\/"));
-
-		return exe_path;
-	}
-
-#else
-	static void _CreateDirectorysA(std::string _path) {
-		char arr_dir_name[256];
-		char* ch_ptr_path = const_cast<char*>(_path.c_str());
-		char* ch_ptr_dirname = arr_dir_name;
-
-		while (*ch_ptr_path) {
-			if (('\\' == *ch_ptr_path) || ('/' == *ch_ptr_path)) {
-				if (':' != *(ch_ptr_path - 1))
-					CreateDirectoryA(arr_dir_name, NULL);
-			}
-			*ch_ptr_dirname++ = *ch_ptr_path++;
-			*ch_ptr_dirname = '\0';
-		}
-		CreateDirectoryA(arr_dir_name, NULL);
-
-	}
-	static std::string _GetEXEFilePathA() {
-		//1. ½ÇÇàÆÄÀÏ °æ·Î ±¸ÇÏ±â 
-		char path[MAX_PATH] = { 0, };
-		GetModuleFileName(NULL, path, MAX_PATH);
-		USES_CONVERSION;
-		std::string exe_path = path;
-		exe_path = exe_path.substr(0, exe_path.find_last_of("\\/"));
-
-		return exe_path;
-	}
-
-
-#endif
-	//4. Directory ³» ÆÄÀÏ ÀĞ±â
-	static std::vector<std::wstring> _GetVecFileLinesW(std::string _path) {
-		std::wstring line;
-		std::vector<std::wstring> vec_line;
+	//4. Directory ë‚´ íŒŒì¼ ì½ê¸°
+	static std::vector<MyString> _GetVecFileLines(const MyString& _path) {
+		MyString line;
+		std::vector<MyString> vec_line;
 		vec_line.reserve(1024);
-		std::wifstream fin(_path);//, std::ios::binary
+
+		tifstream fin(_path);//, std::ios::binary
 
 		if (true == fin.is_open()) {
 			while (std::getline(fin, line))
 				vec_line.emplace_back(line);
-			fin.close(); // ¿­¾ú´ø ÆÄÀÏÀ» ´İ´Â´Ù. 
+			fin.close(); // ì—´ì—ˆë˜ íŒŒì¼ì„ ë‹«ëŠ”ë‹¤. 
 		}
 		else {
-			std::cout << "ÆÄÀÏ ¿­±â ½ÇÆĞ" << std::endl;
+			std::tcout << _T("íŒŒì¼ ì—´ê¸° ì‹¤íŒ¨") << std::endl;
 		}
 		vec_line.shrink_to_fit();
 		return vec_line;
 	}
-	//4. Directory ³» ÆÄÀÏ ÀĞ±â
-	static std::vector<std::string> _GetVecFileLinesA(std::string _path) {
+	//5. Directory ë‚´ íŒŒì¼ ìˆ˜ì •
 
-		std::string line;
-		std::vector<std::string> vec_line;
-		vec_line.reserve(1024);
-		std::ifstream fin(_path);//, std::ios::binary
-
-		if (true == fin.is_open()) {
-			while (std::getline(fin, line))
-				vec_line.emplace_back(line);
-
-			fin.close(); // ¿­¾ú´ø ÆÄÀÏÀ» ´İ´Â´Ù. 
-		}
-		else {
-			std::cout << "ÆÄÀÏ ¿­±â ½ÇÆĞ" << std::endl;
-		}
-		vec_line.shrink_to_fit();
-		return vec_line;
-	}
 };

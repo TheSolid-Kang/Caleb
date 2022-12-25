@@ -1,10 +1,17 @@
 #pragma once
 #include <Windows.h>
-#include <commdlg.h> //ÆÄÀÏ ´ÙÀÌ¾ó·Î±×¿ë.
+#include <commdlg.h> //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¾ï¿½Î±×¿ï¿½.
 #include <string>
+#include <tchar.h>
 
 #include <tchar.h>//ExecuteFile () 
 #include <stdio.h>//ExecuteFile () 
+
+#if UNICODE 
+using MyString = std::wstring;
+#else
+using MyString = std::string;
+#endif;
 
 class CFileMgr {
 public:
@@ -39,7 +46,7 @@ private:
 		OPENFILENAME OFN;
 		TCHAR filePathName[100] = L"";
 		TCHAR lpstrFile[100] = L"";
-		static TCHAR filter[] = L"¸ðµç ÆÄÀÏ\0*.*\0ÅØ½ºÆ® ÆÄÀÏ\0*.txt\0fbx ÆÄÀÏ\0*.fbx";
+		static TCHAR filter[] = L"ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½\0*.*\0ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½\0*.txt\0fbx ï¿½ï¿½ï¿½ï¿½\0*.fbx";
 		HWND hWnd = NULL;
 
 		memset(&OFN, 0, sizeof(OPENFILENAME));
@@ -52,12 +59,12 @@ private:
 		OFN.lpstrInitialDir = L".";
 
 		if (GetOpenFileName(&OFN) != 0) {
-			wsprintf(filePathName, L"%s ÆÄÀÏÀ» ¼±ÅÃÇÏ½Ã°Ú½À´Ï±î?", OFN.lpstrFile);
-			MessageBox(hWnd, filePathName, L"¿­±â ¼±ÅÃ", MB_OK);
+			wsprintf(filePathName, L"%s ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?", OFN.lpstrFile);
+			MessageBox(hWnd, filePathName, L"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", MB_OK);
 
 			std::wstring wstr_result(OFN.lpstrFile); //LPWSTR -> std::wstring
 
-			return wstr_result;//ÆÄÀÏ °æ·Î ´ã±è
+			return wstr_result;//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		}
 		return L"";
 	}	
@@ -77,7 +84,7 @@ private:
 		sei.lpVerb = L"open";
 		DWORD result = ShellExecuteEx(&sei);
 		if (sei.hProcess != NULL)
-			WaitForSingleObject(sei.hProcess, INFINITE); //¿©±â¼­ ÇØ´ç ÇÁ·Î¼¼½º°¡ Á¾·áµÉ¶§±îÁö ´ë±âÇÏ°ÔµÊ
+			WaitForSingleObject(sei.hProcess, INFINITE); //ï¿½ï¿½ï¿½â¼­ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°Ôµï¿½
 
 		//ShellExecute(NULL, L"open", "C:\\ManyoneChurch\\msi\\sql.bat", NULL, NULL, SW_SHOW);
 		ShellExecute(NULL, L"open", path.c_str(), NULL, NULL, SW_SHOW);
@@ -88,7 +95,7 @@ private:
 		OPENFILENAME OFN;
 		TCHAR filePathName[100] = "";
 		TCHAR lpstrFile[100] = "";
-		static TCHAR filter[] = "¸ðµç ÆÄÀÏ\0*.*\0ÅØ½ºÆ® ÆÄÀÏ\0*.txt\0fbx ÆÄÀÏ\0*.fbx";
+		static TCHAR filter[] = "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½\0*.*\0ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½\0*.txt\0fbx ï¿½ï¿½ï¿½ï¿½\0*.fbx";
 		HWND hWnd = NULL;
 
 		memset(&OFN, 0, sizeof(OPENFILENAME));
@@ -101,12 +108,12 @@ private:
 		OFN.lpstrInitialDir = ".";
 
 		if (GetOpenFileName(&OFN) != 0) {
-			wsprintf(filePathName, "%s ÆÄÀÏÀ» ¼±ÅÃÇÏ½Ã°Ú½À´Ï±î?", OFN.lpstrFile);
-			MessageBox(hWnd, filePathName, "¿­±â ¼±ÅÃ", MB_OK);
+			wsprintf(filePathName, "%s ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?", OFN.lpstrFile);
+			MessageBox(hWnd, filePathName, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", MB_OK);
 			auto temp = OFN.lpstrFile;
 			std::string str_result(temp);//LPSTR -> std::string
 
-			return str_result;//ÆÄÀÏ °æ·Î ´ã±è
+			return str_result;//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		}
 		return "";
 	}
@@ -126,7 +133,7 @@ private:
 		sei.lpVerb = "open";
 		DWORD result = ShellExecuteEx(&sei);
 		if (sei.hProcess != NULL)
-			WaitForSingleObject(sei.hProcess, INFINITE); //¿©±â¼­ ÇØ´ç ÇÁ·Î¼¼½º°¡ Á¾·áµÉ¶§±îÁö ´ë±âÇÏ°ÔµÊ
+			WaitForSingleObject(sei.hProcess, INFINITE); //ï¿½ï¿½ï¿½â¼­ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï°Ôµï¿½
 
 		//ShellExecute(NULL, L"open", "C:\\ManyoneChurch\\msi\\sql.bat", NULL, NULL, SW_SHOW);
 		ShellExecute(NULL, "open", path.c_str(), NULL, NULL, SW_SHOW);

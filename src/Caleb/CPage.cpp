@@ -1,6 +1,6 @@
 #include "CPage.h"
 
-// ¸Þ¸ð¸® ¸¯À» ÄÜ¼Ö¿¡ Ç¥½ÃÇÏ±â À§ÇÑ ÇÔ¼ö
+// ï¿½Þ¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¼Ö¿ï¿½ Ç¥ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 #if _DEBUG
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
@@ -45,14 +45,12 @@ int CPage::Execute(int _event = 0)
 	system("cls");
 
 	initialize();
-	//CFIOMgr¿¡¼­ std::locale::global(std::locale(".UTF-8"));
-	//Ã³¸® ÇßÀ¸¹Ç·Î 
-	//ÄÜ¼Ö·Î ÇÑ±Û º¸·Á¸é koreanÀ¸·Î º¯°æ ÇØ¾ßÇÔ.
+	//CFIOMgrï¿½ï¿½ï¿½ï¿½ std::locale::global(std::locale(".UTF-8"));
+	//Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ 
+	//ï¿½Ü¼Ö·ï¿½ ï¿½Ñ±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ koreanï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½.
 	//std::locale::global(std::locale("Korean"));
 
-	std::locale::global(std::locale("Korean"));
 	render();
-	std::locale::global(std::locale(".UTF-8"));
 
 	int Update = update(_event);
 

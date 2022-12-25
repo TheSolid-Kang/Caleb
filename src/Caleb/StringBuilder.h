@@ -1,15 +1,25 @@
 #pragma once
 #include <string>
+#include <tchar.h>
+
+#if UNICODE 
+using MyString = std::wstring;
+#else
+using MyString = std::string;
+#endif;
+
+#define DEF_CAP 2048
+
 
 class StringBuilder {
 private:
-	std::string main;
-	std::string scratch;
+	MyString main;
+	MyString scratch;
 
-	const std::string::size_type ScratchSize = 1024;  // 다른 임의의 숫자 넣어도 됨.
+	const MyString::size_type ScratchSize = 1024;  // 다른 임의의 숫자 넣어도 됨.
 
 public:
-	StringBuilder& append(const std::string& str) {
+	StringBuilder& append(const MyString& str) {
 		scratch.append(str);
 		if (scratch.size() > ScratchSize) {
 			main.append(scratch);
@@ -18,13 +28,13 @@ public:
 		return *this;
 	}
 
-	StringBuilder& append_endl(const std::string& str) {
+	StringBuilder& append_endl(const MyString& str) {
 		append(str);
-		append("\n");
+		append(_T("\n"));
 		return *this;
 	}
 
-	const std::string& str() {
+	const MyString& str() {
 		if (scratch.size() > 0) {
 			main.append(scratch);
 			scratch.resize(0);

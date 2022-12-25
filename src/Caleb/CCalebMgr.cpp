@@ -22,14 +22,14 @@ void CCalebMgr::init_key(void)
 	
 }
 
-bool CCalebMgr::InitCaleb(const std::string& _diary_file_path) noexcept
+bool CCalebMgr::InitCaleb(const MyString& _diary_file_path) noexcept
 {
 
 	return false;
 }
 
-std::vector<std::string> CCalebMgr::GetVecSection(void) noexcept
+std::vector<MyString> CCalebMgr::GetVecSection(void) noexcept
 {
-	std::string str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileString_INI("SECTION", "ARR_CALEB_SECTION");
-	return CMyEtc::Split(str_ARR_DIARY_SECTION, '|');
+	MyString str_ARR_DIARY_SECTION = CINIMgr::_GetPrivateProfileString_INI(_T("SECTION"), _T("ARR_CALEB_SECTION"));
+	return CMyEtc::Split(str_ARR_DIARY_SECTION, _T('|'));
 }

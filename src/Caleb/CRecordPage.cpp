@@ -15,32 +15,31 @@ void CRecordPage::initialize(void)
   auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
   int i = 0;
   m_list_note.insert(m_list_note.end(), vec_section.cbegin(), vec_section.cend());
-  std::for_each(m_list_note.begin(), m_list_note.end(), [&i](std::string& _note) { _note = std::to_string(i++) + ". " + _note; });
+  std::for_each(m_list_note.begin(), m_list_note.end(), [&i](MyString& _note) { _note = std::to_tstring(i++) + _T(". ") + _note; });
 
-  m_list_note.emplace_front(typeid(*this).name());
-  m_list_note.emplace_back("99. EXIT");
+  //m_list_note.emplace_front(typeid(*this).name());
+  m_list_note.emplace_back(_T("99. EXIT"));
 }
 
 void CRecordPage::init_note(void) noexcept
 {
   if (0 != m_list_note.size())
     m_list_note.clear();
-
-  m_vec_file_name = CFIOMgr::GetFilesInDirectory(CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH"));
+  auto dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+  m_vec_file_name = CFIOMgr::_GetFilesInDirectory(dir_path);
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
   int i = 0;
-  m_list_note.emplace_back(typeid(*this).name());
-  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const std::string& _file_name) {
-    size_t index = _file_name.find_last_of("\\") + 1;
-    m_list_note.emplace_back(std::to_string(++i) + ". " + _file_name.substr(index, _file_name.size() - index));
+  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const MyString& _file_name) {
+    size_t index = _file_name.find_last_of(_T("\\")) + 1;
+    m_list_note.emplace_back(std::to_tstring(++i) + _T(". ") + _file_name.substr(index, _file_name.size() - index));
     });
-  m_list_note.emplace_back(std::to_string(m_vec_file_name.size() + 1) + ". EXIT");
+  m_list_note.emplace_back(std::to_tstring(m_vec_file_name.size() + 1) + _T(". EXIT"));
 }
 
 void CRecordPage::render(void)
 {
-  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const std::string& _title) {std::cout << _title << std::endl; });
+  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const MyString& _title) {std::tcout << _title << std::endl; });
 }
 
 int CRecordPage::update(int _event)
@@ -73,23 +72,20 @@ void CRecordPage::release(void)
 void CRecordPage::PrintSelectedDairy(int _selected_diary)
 {
   system("cls");
-  std::string selected_file_path = m_vec_file_name[_selected_diary - 1];
-  std::cout << selected_file_path << std::endl;
-  //auto diary = CDiaryMgr::GetInstance().GetDiary(selected_file_path);
+  MyString selected_file_path = m_vec_file_name[_selected_diary - 1];
+  std::tcout << selected_file_path << std::endl;
 
   auto diary = CDiaryMgr::GetInstance().GetDiarySelectedSection(selected_file_path, m_strDiarySection);
-  std::locale::global(std::locale("Korean"));
-  std::cout << diary << std::endl;
+  std::tcout << diary << std::endl;
   
   auto map_wordcount = CDiaryMgr::GetInstance().GetMapWordCount(selected_file_path, m_strDiarySection);
-  std::cout << "=================search===================" << std::endl;
-  std::cout << "section == " << m_strDiarySection << std::endl;
-  for (std::pair<std::string, int> _pair : map_wordcount)
+  std::tcout << _T("=================search===================") << std::endl;
+  std::tcout << _T("section == ") << m_strDiarySection << std::endl;
+  for (std::pair<MyString, int> _pair : map_wordcount)
   {
-    while (_pair.first.length() < 10) //Ä­ ¼ö ¸ÂÃß±â
-      _pair.first.append(" ");
-    std::cout << "key: " << _pair.first << " count: " << _pair.second << std::endl;
+    while (_pair.first.length() < 10) //Ä­ ï¿½ï¿½ ï¿½ï¿½ï¿½ß±ï¿½
+      _pair.first.append(_T(" "));
+    std::tcout << _T("key: ") << _pair.first << _T(" count: ") << _pair.second << std::endl;
   }
-  std::cout << "==========================================" << std::endl;
-  std::locale::global(std::locale(".UTF-8"));
+  std::tcout << _T("==========================================") << std::endl;
 }

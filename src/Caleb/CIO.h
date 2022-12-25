@@ -1,48 +1,59 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <tchar.h>
 #include <exception>
+#if UNICODE 
+using MyString = std::wstring;
+#define tcout  wcout
+#define tcin  wcin
+#else
+using MyString = std::string;
+#define tcout  cout
+#define tcin  cin
+#endif;
+
 
 class CIO
 {
 public:
-	static int ask_and_return_integer(std::string&& _str_ask = "Choose: ")
+	static int ask_and_return_integer(MyString&& _str_ask =_T("Choose: "))
 	{
-			std::cout << _str_ask;
+			std::tcout << _str_ask;
 			int input_num;
-			std::cin >> input_num;
+			std::tcin >> input_num;
 			try {
-				if (std::cin.fail())
+				if (std::tcin.fail())
 				{
-					std::cin.clear();//¿À·ù »óÅÂ¸¦ Ãë¼ÒÇÕ´Ï´Ù.
-					std::cin.ignore(256, '\n'); //ÀÔ·Â ¹öÆÛ¿¡ ³²¾ÆÀÖ´Â Àß¸øµÈ °ªµéÀ» Áö¿î´Ù.
-					std::cout << "¼ıÀÚ¸¸ ÀÔ·ÂÇØÁÖ¼¼¿ä." << std::endl;
+					std::tcin.clear();//ì˜¤ë¥˜ ìƒíƒœë¥¼ ì·¨ì†Œí•©ë‹ˆë‹¤.
+					std::tcin.ignore(256, '\n'); //ì…ë ¥ ë²„í¼ì— ë‚¨ì•„ìˆëŠ” ì˜ëª»ëœ ê°’ë“¤ì„ ì§€ìš´ë‹¤.
+					std::tcout << _T("ìˆ«ìë§Œ ì…ë ¥í•´ì£¼ì„¸ìš”.") << std::endl;
 
 					return ask_and_return_integer(std::move(_str_ask));
-					//std::move()ÇÔ¼ö´Â ÀÎÀÚ·Î µé¾î¿À´Â °ªÀ» ¿ìÃø°ª ÂüÁ¶·Î Å¸ÀÔÀ» º¯È¯ÇØÁÖ´Â ±â´É
-					//Áï, &&·Î ¹Ù²ãÁØ °ÍÀÓ.
+					//std::move()í•¨ìˆ˜ëŠ” ì¸ìë¡œ ë“¤ì–´ì˜¤ëŠ” ê°’ì„ ìš°ì¸¡ê°’ ì°¸ì¡°ë¡œ íƒ€ì…ì„ ë³€í™˜í•´ì£¼ëŠ” ê¸°ëŠ¥
+					//ì¦‰, &&ë¡œ ë°”ê¿”ì¤€ ê²ƒì„.
 				}
 			} catch (std::exception _e) {
-				std::cout << _e.what() << std::endl;
+				std::tcout << _e.what() << std::endl;
 			}
 		return input_num;
 	}
 
-	static std::string ask_and_return_string(const std::string&& _str_ask = "Choose: ")
+	static MyString ask_and_return_string(MyString&& _str_ask = _T("Choose: "))
 	{
-		std::cout << _str_ask;
-		std::string str_answer = "";
+		std::tcout << _str_ask;
+		MyString str_answer = _T("");
 		try {
-			if (std::cin.fail())
+			if (std::tcin.fail())
 			{
-				std::cin.clear();
-				std::cin.ignore(256, 'n');
+				std::tcin.clear();
+				std::tcin.ignore(256, _T('n'));
 			}
-			std::getline(std::cin, str_answer);
-			std::cout << "";
+			std::getline(std::tcin, str_answer);
+			std::tcout << "";
 		}
 		catch (std::exception _e) {
-			std::cout << _e.what() << std::endl;
+			std::tcout << _e.what() << std::endl;
 		}
 		return str_answer;
 	}

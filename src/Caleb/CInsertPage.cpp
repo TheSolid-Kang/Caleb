@@ -11,18 +11,18 @@ CInsertPage::~CInsertPage()
 
 void CInsertPage::initialize(void)
 {
-	auto arr_note = build_array(typeid(*this).name()
-		, "1. ¿À´ÃÀÚ ÀÏ±â »ı¼º"
-		, "2. »ç¿ëÀÚ Á¤ÀÇ ÀÏ±â »ı¼º(»ı¼º °á°ú ¿¹½Ã: 221127.TXT)"
-		, "3. "
-		, ""
-		, "99. EXIT");
+	auto arr_note = build_array(
+		_T("1. ì˜¤ëŠ˜ì ì¼ê¸° ìƒì„±")
+		, _T("2. ì‚¬ìš©ì ì •ì˜ ì¼ê¸° ìƒì„±(ìƒì„± ê²°ê³¼ ì˜ˆì‹œ: 221127.TXT)")
+		, _T("3. ")
+		, _T("")
+		, _T("99. EXIT"));
 	m_list_note.insert(m_list_note.end(), arr_note.begin(), arr_note.end());
 }
 
 void CInsertPage::render(void)
 {
-	std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](auto _note) {std::cout << _note << std::endl; });
+	std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](auto _note) {std::tcout << _note << std::endl; });
 }
 
 int CInsertPage::update(int _event)
@@ -42,84 +42,84 @@ void CInsertPage::release(void)
 
 /// <summary>
 /// 
-/// 1. INI¿¡¼­ Diary ÀúÀåÇÒ Path È®ÀÎ
-/// 2. ÆÄÀÏ¸í Á¦ÀÛ
+/// 1. INIì—ì„œ Diary ì €ì¥í•  Path í™•ì¸
+/// 2. íŒŒì¼ëª… ì œì‘
 /// 3. 
 /// </summary>
 /// <param name="iSelectedEvent"></param>
 void CInsertPage::CreateDiary(int _iSelectedEvent)
 {
-	//1. Æú´õ °æ·Î°¡ ¾ø´Â °æ¿ì »ı¼ºÇÏ±â
-	std::string path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_PATH");
+	//1. í´ë” ê²½ë¡œê°€ ì—†ëŠ” ê²½ìš° ìƒì„±í•˜ê¸°
+	MyString path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	if (false == std::filesystem::exists(path))
-		CFIOMgr::CreateDirectorys(path);
+		CFIOMgr::_CreateDirectorys(path);
 
-	//2. ÆÄÀÏ ¸¸µé±â
-	auto cur_time = std::chrono::system_clock::now();// ÀÚ·áÇü == std::chrono::system_clock::time_point
+	//2. íŒŒì¼ ë§Œë“¤ê¸°
+	auto cur_time = std::chrono::system_clock::now();// ìë£Œí˜• == std::chrono::system_clock::time_point
 	std::time_t t_cur_time = std::chrono::system_clock::to_time_t(cur_time);
 	struct tm t_tm = *localtime(&t_cur_time);
 
-	std::string str_file_name = CreateName(_iSelectedEvent);
+	MyString str_file_name = CreateName(_iSelectedEvent);
 
-	if (true == std::filesystem::exists(path + "\\" + str_file_name))//ÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ´Ù¸é ·ÎÁ÷ ¾È µ·´Ù.
+	if (true == std::filesystem::exists(path + _T("\\") + str_file_name))//íŒŒì¼ì´ ì´ë¯¸ ìˆë‹¤ë©´ ë¡œì§ ì•ˆ ëˆë‹¤.
 		return;
 
-	//3. ¾ç½Ä °¡Á®¿À±â 
-	//  1) ¾ç½Ä path 
-	std::string form_path = CINIMgr::GetPrivateProfileString_INI("PATH", "DIARY_FORM_PATH");
-	auto vec_line = CFIOMgr::GetVecFileLines(form_path);
+	//3. ì–‘ì‹ ê°€ì ¸ì˜¤ê¸° 
+	//  1) ì–‘ì‹ path 
+	MyString form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
+	auto vec_line = CFIOMgr::_GetVecFileLines(form_path);
 	StringBuilder str_buil_line;
 	std::for_each(vec_line.cbegin(), vec_line.cend(), [&](auto _line) {str_buil_line.append_endl(_line); });
 
-	//4. ¸¸µé¾îÁø ÆÄÀÏ¿¡ ¾ç½Ä¿¡ ´ã±ä µ¥ÀÌÅÍ ³Ö±â
-	std::string full_path = path + "\\" + str_file_name;
-	CFIOMgr::WriteText(full_path, str_buil_line.str());
+	//4. ë§Œë“¤ì–´ì§„ íŒŒì¼ì— ì–‘ì‹ì— ë‹´ê¸´ ë°ì´í„° ë„£ê¸°
+	MyString full_path = path + _T("\\") + str_file_name;
+	CFIOMgr::_WriteText(full_path, str_buil_line.str());
 }
 
 /// <summary>
-/// ÆÄÀÏ ¸í »ı¼º
+/// íŒŒì¼ ëª… ìƒì„±
 /// </summary>
 /// <param name="_iSelectedEvent"></param>
 /// <returns></returns>
-std::string CInsertPage::CreateName(int _iSelectedEvent)
+MyString CInsertPage::CreateName(int _iSelectedEvent)
 {
 	StringBuilder str_buil;
-		auto cur_time = std::chrono::system_clock::now();// ÀÚ·áÇü == std::chrono::system_clock::time_point
+		auto cur_time = std::chrono::system_clock::now();// ìë£Œí˜• == std::chrono::system_clock::time_point
 		std::time_t t_cur_time = std::chrono::system_clock::to_time_t(cur_time);
 		struct tm t_tm = *localtime(&t_cur_time);
 		
 	switch (_iSelectedEvent)
 	{
-	case 1: //¿À´ÃÀÚ ÀÏ±â »ı¼º
+	case 1: //ì˜¤ëŠ˜ì ì¼ê¸° ìƒì„±
 		//221127
-		//ÀÌÀ¯´Â ¸ğ¸£°Ú´Â error
-		//error: case ·¹ÀÌºí¿¡ ÀÖÇØ t_cur_time, cur_time ÀÇ ÃÊ±âÈ­°¡ »ı·«µÆ½À´Ï´Ù.
-		//auto cur_time = std::chrono::system_clock::now();// ÀÚ·áÇü == std::chrono::system_clock::time_point
+		//ì´ìœ ëŠ” ëª¨ë¥´ê² ëŠ” error
+		//error: case ë ˆì´ë¸”ì— ìˆí•´ t_cur_time, cur_time ì˜ ì´ˆê¸°í™”ê°€ ìƒëµëìŠµë‹ˆë‹¤.
+		//auto cur_time = std::chrono::system_clock::now();// ìë£Œí˜• == std::chrono::system_clock::time_point
 		//std::time_t t_cur_time = std::chrono::system_clock::to_time_t(cur_time);
 		//struct tm t_tm = *localtime(&t_cur_time);
 		
-		//¿¬
-		str_buil.append(std::to_string(t_tm.tm_year - 100)); //-100ÇÑ ÀÌÀ¯: 1900³âµµºÎÅÍÀÌ¹Ç·Î 100³âÀÌ ´õÇØÁ®¼­ ³ª¿À±â¿¡  
+		//year
+		str_buil.append(std::to_tstring(t_tm.tm_year - 100)); //-100ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: 1900ï¿½âµµï¿½ï¿½ï¿½ï¿½ï¿½Ì¹Ç·ï¿½ 100ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½â¿¡  
 		
-		//¿ù
+		//month
 		if(t_tm.tm_mon + 1 > 10)
-			str_buil.append(std::to_string(t_tm.tm_mon + 1));// + 1ÇÑ ÀÌÀ¯: 0 ~ 11 ¿ù·Î Ãë±ŞµÇ¹Ç·Î 
+			str_buil.append(std::to_tstring(t_tm.tm_mon + 1));// + 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: 0 ~ 11 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ŞµÇ¹Ç·ï¿½ 
 		else
-			str_buil.append("0" + std::to_string(t_tm.tm_mon + 1));// + 1ÇÑ ÀÌÀ¯: 0 ~ 11 ¿ù·Î Ãë±ŞµÇ¹Ç·Î 
+			str_buil.append(_T("0") + std::to_tstring(t_tm.tm_mon + 1));// + 1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: 0 ~ 11 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ŞµÇ¹Ç·ï¿½ 
 		
-		//ÀÏ
+		//day
 		if(t_tm.tm_mday >= 10)
-			str_buil.append(std::to_string(t_tm.tm_mday));
+			str_buil.append(std::to_tstring(t_tm.tm_mday));
 		else
-			str_buil.append("0" + std::to_string(t_tm.tm_mday));
+			str_buil.append(_T("0") + std::to_tstring(t_tm.tm_mday));
 
 		break;
-	case 2: //»ç¿ëÀÚ Á¤ÀÇ ÀÏ±â »ı¼º(»ı¼º °á°ú ¿¹½Ã: 221127.TXT)
-		str_buil.append(std::to_string(CIO::ask_and_return_integer("ÀÔ·Â(¿¹½Ã 221127): ")));
+	case 2://ì‚¬ìš©ì ì •ì˜ ì¼ê¸° ìƒì„±(ìƒì„± ê²°ê³¼ ì˜ˆì‹œ: 221127.TXT)
+		str_buil.append(std::to_tstring(CIO::ask_and_return_integer(_T("ì…ë ¥(ì˜ˆì‹œ 221127): "))));
 		
 		break;
 	}
-	str_buil.append(".TXT");
+	str_buil.append(_T(".TXT"));
 
 	return str_buil.str();
 }

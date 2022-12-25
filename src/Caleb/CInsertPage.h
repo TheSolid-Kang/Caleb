@@ -6,7 +6,7 @@ public:
 	CInsertPage();
 	~CInsertPage();
 private:
-	// CPageÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// CPageï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	void initialize(void) override;
 	void render(void) override;
 	int update(int _event) override;
@@ -15,12 +15,12 @@ private:
 
 private:
 	void CreateDiary(int _iSelectedEvent = 1);
-	std::string CreateName(int _iSelectedEvent );
+	MyString CreateName(int _iSelectedEvent );
 };
 
 /*
 [DiaryForm.TXT]
-<--ÇÒ ÀÏ-->
+<--ï¿½ï¿½ ï¿½ï¿½-->
 1.
 2.
 3.

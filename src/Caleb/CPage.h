@@ -25,10 +25,10 @@ public:
 	virtual ~CPage();
 protected:
 	CPageMgr& m_r_page_mgr;
-	std::list<std::string> m_list_note;
+	std::list<MyString> m_list_note;
 
 protected:
-	// IPageÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// IPageï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	virtual void initialize(void) override;
 	virtual void render(void) override;
 	virtual int update(int _event) override;

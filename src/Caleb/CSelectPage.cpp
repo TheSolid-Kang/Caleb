@@ -10,19 +10,18 @@ CSelectPage::~CSelectPage()
 
 void CSelectPage::initialize(void)
 {
-  auto arr_page = build_array(typeid(*this).name()
-    , "1. Insert Page"
-    , "2. Record Page"
-    , "3. Update Page"
-    , "4. ¹Ì¿Ï_DELETE Page"
-    , "5. Setting Page"
-    , "99.EXIT");
+  auto arr_page = build_array(_T("1. Insert Page")
+    , _T("2. Record Page")
+    , _T("3. Update Page")
+    , _T("4. ë¯¸ì™„_DELETE Page")
+    , _T("5. Setting Page")
+    , _T("99.EXIT"));
   m_list_page.insert(m_list_page.end(), arr_page.begin(), arr_page.end());
 }
 
 void CSelectPage::render(void)
 {
-  std::for_each(m_list_page.cbegin(), m_list_page.cend(), [](auto _ch_page) {std::cout << _ch_page << std::endl; });
+  std::for_each(m_list_page.cbegin(), m_list_page.cend(), [](auto _ch_page) {std::tcout << _ch_page << std::endl; });
 }
 
 int CSelectPage::update(int _event = 0)
