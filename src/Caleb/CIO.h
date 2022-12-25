@@ -4,11 +4,11 @@
 #include <tchar.h>
 #include <exception>
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #define tcout  wcout
 #define tcin  wcin
 #else
-using MyString = std::string;
+using TString = std::string;
 #define tcout  cout
 #define tcin  cin
 #endif;
@@ -17,7 +17,7 @@ using MyString = std::string;
 class CIO
 {
 public:
-	static int ask_and_return_integer(MyString&& _str_ask =_T("Choose: "))
+	static int ask_and_return_integer(TString&& _str_ask =_T("Choose: "))
 	{
 			std::tcout << _str_ask;
 			int input_num;
@@ -39,10 +39,10 @@ public:
 		return input_num;
 	}
 
-	static MyString ask_and_return_string(MyString&& _str_ask = _T("Choose: "))
+	static TString ask_and_return_string(TString&& _str_ask = _T("Choose: "))
 	{
 		std::tcout << _str_ask;
-		MyString str_answer = _T("");
+		TString str_answer = _T("");
 		try {
 			if (std::tcin.fail())
 			{

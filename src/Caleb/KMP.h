@@ -5,14 +5,14 @@
 #include <tchar.h>
 
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #else
-using MyString = std::string;
+using TString = std::string;
 #endif;
 class KMP
 {
 private:
-	static std::unique_ptr<std::vector<int> > get_pi(const MyString& _strSearchKey) {
+	static std::unique_ptr<std::vector<int> > get_pi(const TString& _strSearchKey) {
 		int j = 0;
 		int iSearchKeySize = (int)_strSearchKey.size();
 		std::unique_ptr<std::vector<int> > uniq_vec_pi = std::make_unique<std::vector<int>>(iSearchKeySize, 0);
@@ -28,7 +28,7 @@ private:
 	}
 
 public:
-	static std::unique_ptr<std::vector<int> > GetSearchedAddress(const MyString& _strText, const MyString& _strSearchKey) {
+	static std::unique_ptr<std::vector<int> > GetSearchedAddress(const TString& _strText, const TString& _strSearchKey) {
 		int j = 0;
 		int iTextSize = (int)_strText.size();
 		int iSearchKeySize = (int)_strSearchKey.size();

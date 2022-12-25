@@ -15,7 +15,7 @@ void CRecordPage::initialize(void)
   auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
   int i = 0;
   m_list_note.insert(m_list_note.end(), vec_section.cbegin(), vec_section.cend());
-  std::for_each(m_list_note.begin(), m_list_note.end(), [&i](MyString& _note) { _note = std::to_tstring(i++) + _T(". ") + _note; });
+  std::for_each(m_list_note.begin(), m_list_note.end(), [&i](TString& _note) { _note = std::to_tstring(i++) + _T(". ") + _note; });
 
   //m_list_note.emplace_front(typeid(*this).name());
   m_list_note.emplace_back(_T("99. EXIT"));
@@ -30,7 +30,7 @@ void CRecordPage::init_note(void) noexcept
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
   int i = 0;
-  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const MyString& _file_name) {
+  std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const TString& _file_name) {
     size_t index = _file_name.find_last_of(_T("\\")) + 1;
     m_list_note.emplace_back(std::to_tstring(++i) + _T(". ") + _file_name.substr(index, _file_name.size() - index));
     });
@@ -39,7 +39,7 @@ void CRecordPage::init_note(void) noexcept
 
 void CRecordPage::render(void)
 {
-  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const MyString& _title) {std::tcout << _title << std::endl; });
+  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const TString& _title) {std::tcout << _title << std::endl; });
 }
 
 int CRecordPage::update(int _event)
@@ -72,7 +72,7 @@ void CRecordPage::release(void)
 void CRecordPage::PrintSelectedDairy(int _selected_diary)
 {
   system("cls");
-  MyString selected_file_path = m_vec_file_name[_selected_diary - 1];
+  TString selected_file_path = m_vec_file_name[_selected_diary - 1];
   std::tcout << selected_file_path << std::endl;
 
   auto diary = CDiaryMgr::GetInstance().GetDiarySelectedSection(selected_file_path, m_strDiarySection);
@@ -81,7 +81,7 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
   auto map_wordcount = CDiaryMgr::GetInstance().GetMapWordCount(selected_file_path, m_strDiarySection);
   std::tcout << _T("=================search===================") << std::endl;
   std::tcout << _T("section == ") << m_strDiarySection << std::endl;
-  for (std::pair<MyString, int> _pair : map_wordcount)
+  for (std::pair<TString, int> _pair : map_wordcount)
   {
     while (_pair.first.length() < 10) //ĭ �� ���߱�
       _pair.first.append(_T(" "));

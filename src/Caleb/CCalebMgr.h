@@ -12,16 +12,16 @@ private:
 	~CCalebMgr();
 
 private:
-	std::map<const MyString, MyString> m_map_caleb;
+	std::map<const TString, TString> m_map_caleb;
 
 private:
 	void initialize(void);
 	void init_key(void);
-	bool InitCaleb(const MyString& _diary_file_path) noexcept;
+	bool InitCaleb(const TString& _diary_file_path) noexcept;
 
 public:
 	static CCalebMgr& GetInstance(void) noexcept { static CCalebMgr instance; return instance; }
-	std::vector<MyString> GetVecSection(void) noexcept;
+	std::vector<TString> GetVecSection(void) noexcept;
 
 
 };

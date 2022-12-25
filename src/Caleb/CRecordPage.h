@@ -7,11 +7,11 @@ public:
 	~CRecordPage();
 
 private:
-	std::vector<MyString> m_vec_file_name;
-	MyString m_strDiarySection;
+	std::vector<TString> m_vec_file_name;
+	TString m_strDiarySection;
 
 private:
-	// CPageÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// CPageï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	void initialize(void) override;
 	void init_note(void) noexcept;
 	void render(void) override;

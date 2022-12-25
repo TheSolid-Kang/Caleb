@@ -8,7 +8,7 @@ public:
 	~CSettingPage();
 
 private:
-	// CPageÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// CPageï¿½ï¿½(ï¿½ï¿½) ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Óµï¿½
 	void initialize(void) override;
 	void render(void) override;
 	int update(int _event) override;

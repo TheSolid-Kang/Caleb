@@ -22,12 +22,12 @@
 #include "CIO.h"
 
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #define tcout  wcout
 #define tcin  wcin
 #define to_tstring   to_wstring
 #else
-using MyString = std::string;
+using TString = std::string;
 #define tcout  cout
 #define tcin  wcin
 #define to_tstring   to_string

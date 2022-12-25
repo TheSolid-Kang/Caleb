@@ -7,7 +7,7 @@ public:
 	~CSelectPage();
 
 private:
-	std::list<MyString> m_list_page;
+	std::list<TString> m_list_page;
 
 private:
 	// CPage��(��) ���� ��ӵ�

@@ -15,7 +15,7 @@ private:
 
 private:
 	void CreateDiary(int _iSelectedEvent = 1);
-	MyString CreateName(int _iSelectedEvent );
+	TString CreateName(int _iSelectedEvent );
 };
 
 /*

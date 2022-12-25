@@ -8,9 +8,9 @@
 #include <stdio.h>//ExecuteFile () 
 
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #else
-using MyString = std::string;
+using TString = std::string;
 #endif;
 
 class CFileMgr {

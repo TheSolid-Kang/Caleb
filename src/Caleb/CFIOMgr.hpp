@@ -8,13 +8,13 @@
 #include <Windows.h>
 #include <atlconv.h>
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 using tifstream = std::wifstream;
 using tofstream = std::wofstream;
 #define tcout  wcout
 #define tcin  wcin
 #else
-using MyString = std::string;
+using TString = std::string;
 using tifstream = std::ifstream;
 using tofstream = std::ofstream;
 #define tcout  cout
@@ -41,9 +41,9 @@ class CFIOMgr
 //4. Directory 내 파일 읽기
 //5. Directory 내 파일 수정
 public:
-	static MyString _GetFileType(int _file_type)
+	static TString _GetFileType(int _file_type)
 	{
-		MyString str_type = _T("");
+		TString str_type = _T("");
 		switch (_file_type)
 		{
 		case static_cast<int>(FILE_TYPE::FT_TXT):
@@ -74,18 +74,18 @@ public:
 
 
 	//0. 실행파일 경로 구하기
-	static MyString _GetEXEFilePath() {
+	static TString _GetEXEFilePath() {
 		//1. �������� ��� ���ϱ� 
 		TCHAR path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
-		MyString exe_path = path;
+		TString exe_path = path;
 		exe_path = exe_path.substr(0, exe_path.find_last_of(_T("\\/")));
 		return exe_path;
 	}
 
 	//1-2. Directory 내 하위 폴더 차례대로 생성
-	static void _CreateDirectorys(const MyString& _path) {
-		MyString path(_path.begin(), _path.end());
+	static void _CreateDirectorys(const TString& _path) {
+		TString path(_path.begin(), _path.end());
 		TCHAR arr_dir_name[256];
 		TCHAR* ch_ptr_path = const_cast<TCHAR*>(path.c_str());
 		TCHAR* ch_ptr_dirname = arr_dir_name;
@@ -102,10 +102,10 @@ public:
 	}
 
 	//1. Directory �� ���� ����
-	static void _CreateNewFile(MyString _path, MyString _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
+	static void _CreateNewFile(TString _path, TString _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
 		if (std::string::npos == _file_name.find(_T(".")))//npos == find 결과가 없는 경우
 			_file_name += _GetFileType(_file_type);
-		MyString file_path = _path + _file_name;
+		TString file_path = _path + _file_name;
 		tofstream fout = tofstream(file_path);//파일 열기_만약 파일이 없으면 만듦.
 
 		std::tcout << _T("fout.is_open() == ") << fout.is_open() << std::endl;
@@ -114,8 +114,8 @@ public:
 	}
 
 	//2. Directory 내 파일 목록 출력
-	static std::vector<MyString> _GetFilesInDirectory(MyString& _path) {
-		std::vector<MyString> vec_files;
+	static std::vector<TString> _GetFilesInDirectory(TString& _path) {
+		std::vector<TString> vec_files;
 		vec_files.reserve(1024);
 		auto iter = std::filesystem::directory_iterator(_path);
 		while (true != iter._At_end()) {
@@ -129,7 +129,7 @@ public:
 		return vec_files;
 	}
 	//3. 파일 쓰기 
-	static void _WriteText(const MyString& _path, const MyString& _text) {
+	static void _WriteText(const TString& _path, const TString& _text) {
 		tofstream fout = tofstream(_path, std::ios::binary);//파일 열기_만약 파일이 없으면 만듦.
 
 		if (true == fout.is_open()) {
@@ -138,9 +138,9 @@ public:
 		}
 	}
 	//4. Directory 내 파일 읽기
-	static std::vector<MyString> _GetVecFileLines(const MyString& _path) {
-		MyString line;
-		std::vector<MyString> vec_line;
+	static std::vector<TString> _GetVecFileLines(const TString& _path) {
+		TString line;
+		std::vector<TString> vec_line;
 		vec_line.reserve(1024);
 
 		tifstream fin(_path);//, std::ios::binary

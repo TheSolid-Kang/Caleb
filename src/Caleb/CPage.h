@@ -25,7 +25,7 @@ public:
 	virtual ~CPage();
 protected:
 	CPageMgr& m_r_page_mgr;
-	std::list<MyString> m_list_note;
+	std::list<TString> m_list_note;
 
 protected:
 	// IPage��(��) ���� ��ӵ�

@@ -6,20 +6,20 @@
 #include <atlconv.h>
 #include <filesystem>
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #else
-using MyString = std::string;
+using TString = std::string;
 #endif;
 
 #define DEF_CAP 2048
 
 class CINIMgr {
 public:
-	static MyString _GetDefaultConfigPath() {
+	static TString _GetDefaultConfigPath() {
 		//1. 실행파일 경로 구하기 
 		TCHAR path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
-		MyString exe_path = path;
+		TString exe_path = path;
 		exe_path = exe_path.substr(0, exe_path.find_last_of(_T("\\/")));
 
 		//221123 삭제: 기능오류 | 모든 ini 파일이 config 폴더 안에만 생성되기에 삭제
@@ -30,13 +30,13 @@ public:
 
 		return exe_path;
 	}
-	static void _WritePrivateProfileString_INI(MyString _section, MyString _key, MyString _value, MyString _path = _GetDefaultConfigPath()) {
+	static void _WritePrivateProfileString_INI(TString _section, TString _key, TString _value, TString _path = _GetDefaultConfigPath()) {
 		WritePrivateProfileString(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
 	}
-	static MyString _GetPrivateProfileString_INI(MyString _section, MyString _key, MyString _path = _GetDefaultConfigPath()) {
+	static TString _GetPrivateProfileString_INI(TString _section, TString _key, TString _path = _GetDefaultConfigPath()) {
 		TCHAR szBuffer[DEF_CAP] = { NULL , };
 		GetPrivateProfileString(_section.c_str(), _key.c_str(), _T("0"), szBuffer, 1024, _path.c_str());
-		MyString wstr(szBuffer);
+		TString wstr(szBuffer);
 		return wstr;
 	}
 

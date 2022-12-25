@@ -48,7 +48,7 @@ void CSettingPage::SelectSetting(int _selected_setting)
 void CSettingPage::DefaultSet(void)
 {
 	//1. SET Config.INI
-	MyString exe_path = CFIOMgr::_GetEXEFilePath();
+	TString exe_path = CFIOMgr::_GetEXEFilePath();
 	CINIMgr::_WritePrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"), exe_path + _T("\\Form\\DiaryForm.TXT"));
 	CINIMgr::_WritePrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"), _T("C:\\Caleb\\CalebRecord"));
 	CINIMgr::_WritePrivateProfileString_INI(_T("PATH"), _T("CALEB_FORM_PATH"), exe_path + _T("\\Form\\CalebForm.TXT"));
@@ -57,13 +57,13 @@ void CSettingPage::DefaultSet(void)
 	CINIMgr::_WritePrivateProfileString_INI(_T("SECTION"), _T("ARR_DIARY_SECTION"), _T("Mission|Record|TheWords|Fellowship|Praise"));
 	CINIMgr::_WritePrivateProfileString_INI(_T("SECTION"), _T("ARR_CALEB_SECTION"), _T("Caleb|Reason|Mission|Record"));
 	if(CINIMgr::_GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD")) == _T("0"))
-		CINIMgr::_WritePrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"), _T("¾Æ¹öÁö|ÅÂ°æ|»ç¶û"));
+		CINIMgr::_WritePrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"), _T("ï¿½Æ¹ï¿½ï¿½ï¿½|ï¿½Â°ï¿½|ï¿½ï¿½ï¿½"));
 
-	//2. diary form ÆÄÀÏ »ý¼º
+	//2. diary form ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
 	StringBuilder str_buil;
 	std::for_each(vec_section.cbegin(), vec_section.cend()
-		, [&str_buil](const MyString& _str_section) {
+		, [&str_buil](const TString& _str_section) {
 			str_buil.append_endl(_T("<--") + _str_section + _T("-->"));
 			str_buil.append_endl(_T(""));
 			str_buil.append_endl(_T("<--End ") + _str_section + _T("-->"));
@@ -72,14 +72,14 @@ void CSettingPage::DefaultSet(void)
 			str_buil.append_endl(_T(""));
 		});
 	CFIOMgr::_CreateDirectorys(exe_path + _T("\\Form\\"));
-	MyString diary_form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
+	TString diary_form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
 	CFIOMgr::_WriteText(diary_form_path, str_buil.str());
 
-	//3. caleb form ÆÄÀÏ »ý¼º
+	//3. caleb form ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	vec_section = CCalebMgr::GetInstance().GetVecSection();
 	str_buil.clear();
 	std::for_each(vec_section.cbegin(), vec_section.cend()
-		, [&str_buil](const MyString& _str_section) {
+		, [&str_buil](const TString& _str_section) {
 			str_buil.append_endl(_T("<--") + _str_section + _T("-->"));
 			str_buil.append_endl(_T(""));
 			str_buil.append_endl(_T("<--End ") + _str_section + _T("-->"));
@@ -88,13 +88,13 @@ void CSettingPage::DefaultSet(void)
 			str_buil.append_endl(_T(""));
 		});
 	CFIOMgr::_CreateDirectorys(exe_path + _T("\\Form\\"));
-	MyString caleb_form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("CALEB_FORM_PATH"));
+	TString caleb_form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("CALEB_FORM_PATH"));
 	CFIOMgr::_WriteText(caleb_form_path, str_buil.str());
 
-	//4. diary ÆÄÀÏ ÀúÀå °æ·Î »ý¼º
+	//4. diary ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	CFIOMgr::_CreateDirectorys(CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH")));
 
-	//5. caleb ÆÄÀÏ ÀúÀå °æ·Î »ý¼º
+	//5. caleb ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	CFIOMgr::_CreateDirectorys(CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("CALEB_PATH")));
 
 

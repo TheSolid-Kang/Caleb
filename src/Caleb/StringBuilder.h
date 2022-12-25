@@ -3,9 +3,9 @@
 #include <tchar.h>
 
 #if UNICODE 
-using MyString = std::wstring;
+using TString = std::wstring;
 #else
-using MyString = std::string;
+using TString = std::string;
 #endif;
 
 #define DEF_CAP 2048
@@ -13,13 +13,13 @@ using MyString = std::string;
 
 class StringBuilder {
 private:
-	MyString main;
-	MyString scratch;
+	TString main;
+	TString scratch;
 
-	const MyString::size_type ScratchSize = 1024;  // ´Ù¸¥ ÀÓÀÇÀÇ ¼ýÀÚ ³Ö¾îµµ µÊ.
+	const TString::size_type ScratchSize = 1024;  // ï¿½Ù¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾îµµ ï¿½ï¿½.
 
 public:
-	StringBuilder& append(const MyString& str) {
+	StringBuilder& append(const TString& str) {
 		scratch.append(str);
 		if (scratch.size() > ScratchSize) {
 			main.append(scratch);
@@ -28,13 +28,13 @@ public:
 		return *this;
 	}
 
-	StringBuilder& append_endl(const MyString& str) {
+	StringBuilder& append_endl(const TString& str) {
 		append(str);
 		append(_T("\n"));
 		return *this;
 	}
 
-	const MyString& str() {
+	const TString& str() {
 		if (scratch.size() > 0) {
 			main.append(scratch);
 			scratch.resize(0);
