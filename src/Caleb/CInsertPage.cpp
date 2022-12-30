@@ -50,9 +50,9 @@ void CInsertPage::release(void)
 void CInsertPage::CreateDiary(int _iSelectedEvent)
 {
 	//1. 폴더 경로가 없는 경우 생성하기
-	TString path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	TString path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	if (false == std::filesystem::exists(path))
-		CFIOMgr::_CreateDirectorys(path);
+		CFIOMgr::CreateDirectorys(path);
 
 	//2. 파일 만들기
 	auto cur_time = std::chrono::system_clock::now();// 자료형 == std::chrono::system_clock::time_point
@@ -66,14 +66,14 @@ void CInsertPage::CreateDiary(int _iSelectedEvent)
 
 	//3. 양식 가져오기 
 	//  1) 양식 path 
-	TString form_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
-	auto vec_line = CFIOMgr::_GetVecFileLines(form_path);
+	TString form_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
+	auto vec_line = CFIOMgr::GetVecFileLines(form_path);
 	StringBuilder str_buil_line;
 	std::for_each(vec_line.cbegin(), vec_line.cend(), [&](auto _line) {str_buil_line.append_endl(_line); });
 
 	//4. 만들어진 파일에 양식에 담긴 데이터 넣기
 	TString full_path = path + _T("\\") + str_file_name;
-	CFIOMgr::_WriteText(full_path, str_buil_line.str());
+	CFIOMgr::WriteText(full_path, str_buil_line.str());
 }
 
 /// <summary>

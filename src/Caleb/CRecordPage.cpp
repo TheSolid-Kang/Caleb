@@ -25,8 +25,8 @@ void CRecordPage::init_note(void) noexcept
 {
   if (0 != m_list_note.size())
     m_list_note.clear();
-  auto dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
-  m_vec_file_name = CFIOMgr::_GetFilesInDirectory(dir_path);
+  auto dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+  m_vec_file_name = CFIOMgr::GetFilesInDirectory(dir_path);
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
 
   int i = 0;

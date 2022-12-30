@@ -15,7 +15,7 @@ using TString = std::string;
 
 class CINIMgr {
 public:
-	static TString _GetDefaultConfigPath() {
+	static TString GetDefaultConfigPath() {
 		//1. 실행파일 경로 구하기 
 		TCHAR path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
@@ -30,10 +30,10 @@ public:
 
 		return exe_path;
 	}
-	static void _WritePrivateProfileString_INI(TString _section, TString _key, TString _value, TString _path = _GetDefaultConfigPath()) {
+	static void WritePrivateProfileString_INI(TString _section, TString _key, TString _value, TString _path = GetDefaultConfigPath()) {
 		WritePrivateProfileString(_section.c_str(), _key.c_str(), _value.c_str(), _path.c_str());
 	}
-	static TString _GetPrivateProfileString_INI(TString _section, TString _key, TString _path = _GetDefaultConfigPath()) {
+	static TString GetPrivateProfileString_INI(TString _section, TString _key, TString _path = GetDefaultConfigPath()) {
 		TCHAR szBuffer[DEF_CAP] = { NULL , };
 		GetPrivateProfileString(_section.c_str(), _key.c_str(), _T("0"), szBuffer, 1024, _path.c_str());
 		TString wstr(szBuffer);

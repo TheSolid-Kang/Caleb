@@ -116,9 +116,6 @@
     <ClInclude Include="CSelectPage.h">
       <Filter>01.CPage\00.CSelectPage</Filter>
     </ClInclude>
-    <ClInclude Include="CFIOMgr.hpp">
-      <Filter>98.Headers\00.CFIOMgr</Filter>
-    </ClInclude>
     <ClInclude Include="CINIMgr.hpp">
       <Filter>98.Headers\01.CINIMgr</Filter>
     </ClInclude>
@@ -148,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="CFileMgr.hpp">
       <Filter>98.Headers\02.CFileMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CFIOMgr.hpp">
+      <Filter>98.Headers\00.CFIOMgr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

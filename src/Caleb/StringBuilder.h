@@ -16,7 +16,7 @@ private:
 	TString main;
 	TString scratch;
 
-	const TString::size_type ScratchSize = 1024;  // �ٸ� ������ ���� �־ ��.
+	const TString::size_type ScratchSize = 1024;  // 다른 임의의 숫자 넣어도 됨.
 
 public:
 	StringBuilder& append(const TString& str) {

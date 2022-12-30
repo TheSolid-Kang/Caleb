@@ -45,10 +45,6 @@ int CPage::Execute(int _event = 0)
 	system("cls");
 
 	initialize();
-	//CFIOMgr���� std::locale::global(std::locale(".UTF-8"));
-	//ó�� �����Ƿ� 
-	//�ַܼ� �ѱ� ������ korean���� ���� �ؾ���.
-	//std::locale::global(std::locale("Korean"));
 
 	render();
 

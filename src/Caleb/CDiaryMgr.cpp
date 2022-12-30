@@ -23,18 +23,18 @@ void CDiaryMgr::initialize(void)
 void CDiaryMgr::init_key(void)
 {
 	//���� ��Ī �� ��������
-	TString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
-	std::vector<TString> vec_file_name = CFIOMgr::_GetFilesInDirectory(diary_dir_path);
+	TString diary_dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	std::vector<TString> vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
 }
 
 bool CDiaryMgr::InitDiary(const TString& _diary_file_path) noexcept
 {
-	TString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	TString diary_dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	if (TString::npos  == _diary_file_path.find(diary_dir_path))
 		const_cast<TString&>(_diary_file_path).append(_T("\\") + _diary_file_path);
 
-	auto vec_line = CFIOMgr::_GetVecFileLines(_diary_file_path);
+	auto vec_line = CFIOMgr::GetVecFileLines(_diary_file_path);
 	StringBuilder str_buil;
 	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const TString& _line) {str_buil.append_endl(_line); });
 
@@ -48,7 +48,7 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 	//0. 
 	TString& diary = GetDiary(_diary_file_path);
 	if (diary == _T("No files."))
-		return _T("������ �����ϴ�.");
+		return _T("No files.");
 
 	//1. Section �� �ʱ�ȭ
 	TString section_begin = _T("<--") + _section + _T("-->");
@@ -73,7 +73,7 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 		m_map_diary[_diary_file_path].append(_T("\n"));
 		m_map_diary[_diary_file_path].append(_T("\n"));
 		m_map_diary[_diary_file_path].append(_T("\n"));
-		CFIOMgr::_WriteText(_diary_file_path, m_map_diary[_diary_file_path]);
+		CFIOMgr::WriteText(_diary_file_path, m_map_diary[_diary_file_path]);
 
 		return _T("");
 	}
@@ -87,19 +87,19 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 
 std::vector<TString> CDiaryMgr::GetVecSection(void) noexcept
 {
-	TString str_ARR_DIARY_SECTION = CINIMgr::_GetPrivateProfileString_INI(_T("SECTION"), _T("ARR_DIARY_SECTION"));
+	TString str_ARR_DIARY_SECTION = CINIMgr::GetPrivateProfileString_INI(_T("SECTION"), _T("ARR_DIARY_SECTION"));
 	return CMyEtc::Split(str_ARR_DIARY_SECTION, _T('|'));
 }
 
 TString& CDiaryMgr::GetDiary(const TString& _diary_file_path)
 {
 	TString result = _T("");
-	TString diary_dir_path = CINIMgr::_GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+	TString diary_dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	if (TString::npos == _diary_file_path.find(diary_dir_path))
 		const_cast<TString&>(_diary_file_path).append(_T("\\") + _diary_file_path);
 
 	//1. ��� �� _diary_name�� ��ġ�ϴ� ������ �ִ��� Ȯ��
-	auto vec_file_path = CFIOMgr::_GetFilesInDirectory(diary_dir_path);
+	auto vec_file_path = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::vector<TString>::const_iterator citer = std::find(vec_file_path.cbegin(), vec_file_path.cend(), _diary_file_path);
 	if (citer == vec_file_path.cend())
 	{
@@ -118,7 +118,7 @@ std::map<TString, int> CDiaryMgr::GetMapWordCount(const TString& _diary_file_pat
 {
 	TString section_record = GetDiarySelectedSection(_diary_file_path, _section);
 	//praise ���ǿ��� ��� �ܾ� �˻�
-	TString wstr_arr_keyword = CINIMgr::_GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
+	TString wstr_arr_keyword = CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
 	auto vec_keyword = CMyEtc::Split(wstr_arr_keyword, _T('|'));
 
 	std::map<TString, int> map_wordcount;

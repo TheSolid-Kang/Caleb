@@ -41,7 +41,7 @@ class CFIOMgr
 //4. Directory 내 파일 읽기
 //5. Directory 내 파일 수정
 public:
-	static TString _GetFileType(int _file_type)
+	static TString GetFileType(int _file_type)
 	{
 		TString str_type = _T("");
 		switch (_file_type)
@@ -74,8 +74,8 @@ public:
 
 
 	//0. 실행파일 경로 구하기
-	static TString _GetEXEFilePath() {
-		//1. �������� ��� ���ϱ� 
+	static TString GetEXEFilePath() {
+		//1. 실행파일 경로 구하기 
 		TCHAR path[MAX_PATH] = { 0, };
 		GetModuleFileName(NULL, path, MAX_PATH);
 		TString exe_path = path;
@@ -84,7 +84,7 @@ public:
 	}
 
 	//1-2. Directory 내 하위 폴더 차례대로 생성
-	static void _CreateDirectorys(const TString& _path) {
+	static void CreateDirectorys(const TString& _path) {
 		TString path(_path.begin(), _path.end());
 		TCHAR arr_dir_name[256];
 		TCHAR* ch_ptr_path = const_cast<TCHAR*>(path.c_str());
@@ -101,10 +101,10 @@ public:
 		CreateDirectory(arr_dir_name, NULL);
 	}
 
-	//1. Directory �� ���� ����
-	static void _CreateNewFile(TString _path, TString _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
+	//1. Directory 내 파일 생성
+	static void CreateNewFile(TString _path, TString _file_name, int _file_type = static_cast<int>(FILE_TYPE::FT_TXT)) {
 		if (std::string::npos == _file_name.find(_T(".")))//npos == find 결과가 없는 경우
-			_file_name += _GetFileType(_file_type);
+			_file_name += GetFileType(_file_type);
 		TString file_path = _path + _file_name;
 		tofstream fout = tofstream(file_path);//파일 열기_만약 파일이 없으면 만듦.
 
@@ -114,7 +114,7 @@ public:
 	}
 
 	//2. Directory 내 파일 목록 출력
-	static std::vector<TString> _GetFilesInDirectory(TString& _path) {
+	static std::vector<TString> GetFilesInDirectory(TString& _path) {
 		std::vector<TString> vec_files;
 		vec_files.reserve(1024);
 		auto iter = std::filesystem::directory_iterator(_path);
@@ -128,8 +128,31 @@ public:
 		vec_files.shrink_to_fit();
 		return vec_files;
 	}
+	//2.5. Directory 내 파일 목록 출력
+	static std::vector<TString> GetRecursiveFilesInDirectory(TString& _path) {
+		std::vector<TString> vec_files;
+		vec_files.reserve(1024);
+		auto iter = std::filesystem::directory_iterator(_path);
+		while (true != iter._At_end()) {
+			std::filesystem::path file_path = (*iter++).path();
+#if UNICODE 
+			TString str_file_path = file_path.wstring();//std::filesystem::path -> std::wstring 으로 변환
+#else
+			TString file_path(file_path.string());//std::filesystem::path -> std::string 으로 변환
+#endif;
+			if (std::filesystem::is_directory(file_path)) {
+				auto vec_recursive_file = GetRecursiveFilesInDirectory(str_file_path);
+				vec_files.insert(vec_files.end(), vec_recursive_file.begin(), vec_recursive_file.end());
+			}
+			else
+				vec_files.emplace_back(str_file_path);
+
+		}
+		vec_files.shrink_to_fit();
+		return vec_files;
+	}
 	//3. 파일 쓰기 
-	static void _WriteText(const TString& _path, const TString& _text) {
+	static void WriteText(const TString& _path, const TString& _text) {
 		tofstream fout = tofstream(_path, std::ios::binary);//파일 열기_만약 파일이 없으면 만듦.
 
 		if (true == fout.is_open()) {
@@ -138,7 +161,7 @@ public:
 		}
 	}
 	//4. Directory 내 파일 읽기
-	static std::vector<TString> _GetVecFileLines(const TString& _path) {
+	static std::vector<TString> GetVecFileLines(const TString& _path) {
 		TString line;
 		std::vector<TString> vec_line;
 		vec_line.reserve(1024);
