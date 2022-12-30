@@ -15,6 +15,7 @@ void CSelectPage::initialize(void)
     , _T("3. Update Page")
     , _T("4. 미완_DELETE Page")
     , _T("5. Setting Page")
+    , _T("6. Test Page")
     , _T("99.EXIT"));
   m_list_page.insert(m_list_page.end(), arr_page.begin(), arr_page.end());
 }

@@ -11,8 +11,8 @@ CUpdatePage::~CUpdatePage()
 
 void CUpdatePage::initialize(void)
 {
-	auto arr_note = build_array(_T("1. ������ �ϱ� ����")
-		, _T("2. ����� ���� �ϱ� ����(���� ��� ����: 221127.TXT)")
+	auto arr_note = build_array(_T("1. ")
+		, _T("2. ")
 		, _T("3. ")
 		, _T("")
 		, _T("99. EXIT"));

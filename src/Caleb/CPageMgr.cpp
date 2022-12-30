@@ -6,6 +6,7 @@
 #include "CRecordPage.h"
 #include "CUpdatePage.h"
 #include "CSettingPage.h"
+#include "CTestPage.h"
 
 
 CPageMgr::CPageMgr()
@@ -46,10 +47,17 @@ int CPageMgr::SetPage(int _page)
 	case static_cast<int>(PAGES::P_SETTING):
 		m_ptr_page = new CSettingPage();
 		break;
+	case static_cast<int>(PAGES::P_TEST):
+		m_ptr_page = new CTestPage();
+		break;
 
 	case static_cast<int>(EXIT):
 		m_ptr_page = new CPage();
 		result = EXIT;
+		break;
+	default:
+		m_ptr_page = new CPage();
+		std::tcout << _T("please, input list number") << std::endl;
 		break;
 	}
 	return result;

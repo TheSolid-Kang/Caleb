@@ -55,6 +55,9 @@
     <Filter Include="98.Headers\02.CFileMgr">
       <UniqueIdentifier>{0c4cd631-6a89-4c93-9048-efff51365c6a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.CPage\05. CTestPage">
+      <UniqueIdentifier>{aeb30bff-1156-4d5c-ab19-66f0e83ebccb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="CUpdatePage.cpp">
       <Filter>01.CPage\03.CUpdatePage</Filter>
+    </ClCompile>
+    <ClCompile Include="CTestPage.cpp">
+      <Filter>01.CPage\05. CTestPage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="CFIOMgr.hpp">
       <Filter>98.Headers\00.CFIOMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CTestPage.h">
+      <Filter>01.CPage\05. CTestPage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
