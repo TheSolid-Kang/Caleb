@@ -22,7 +22,6 @@ void CDiaryMgr::initialize(void)
 
 void CDiaryMgr::init_key(void)
 {
-	//���� ��Ī �� ��������
 	TString diary_dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	std::vector<TString> vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
@@ -50,11 +49,11 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 	if (diary == _T("No files."))
 		return _T("No files.");
 
-	//1. Section �� �ʱ�ȭ
+	//1. Section 
 	TString section_begin = _T("<--") + _section + _T("-->");
 	TString section_last = _T("<--End ") + _section + _T("-->");
 
-	//2. ���ڿ� �� index �ʱ�ȭ 
+	//2. ���ڿ� �� index 
 	auto index_first = diary.find(section_begin);
 	auto index_last = diary.rfind(section_last);
 	if (index_first == TString::npos || index_last == TString::npos)

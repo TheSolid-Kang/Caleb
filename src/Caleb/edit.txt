@@ -1,7 +1,7 @@
 
 
 [DiaryForm.TXT]
-<--ÇÒ ÀÏ-->
+<--ï¿½ï¿½ ï¿½ï¿½-->
 1.
 2.
 3.
@@ -44,14 +44,14 @@ CREATE TABLE twomites.FELLOWSHIP_DEPARTMENT(
   , department NVARCHAR(128)
 );
 SELECT * FROM twomites.FELLOWSHIP_DEPARTMENT;
-INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_Âù¾ç´ë');
-INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_¼Ò¸ÁºÎ');
+INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_ï¿½ï¿½ï¿½ï¿½ï¿½');
+INSERT INTO twomites.FELLOWSHIP_DEPARTMENT(fd_department) VALUE('2022_ï¿½Ò¸ï¿½ï¿½ï¿½');
 
 /*
-PK | FELLOWSHIP Å×ÀÌºí ID
-, FK | ±³Á¦ ºÎ¼­ Å×ÀÌºí ID
-, »ý¼ºÀÏÀÚ 
-, °£Áõ
+PK | FELLOWSHIP ï¿½ï¿½ï¿½Ìºï¿½ ID
+, FK | ï¿½ï¿½ï¿½ï¿½ ï¿½Î¼ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ID
+, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+, ï¿½ï¿½ï¿½ï¿½
 */
 CREATE TABLE twomites.FELLOWSHIP(
   id INT auto_increment primary KEY
@@ -63,13 +63,13 @@ CREATE TABLE twomites.FELLOWSHIP(
   	, foreign key (fd_id) references twomites.FELLOWSHIP_DEPARTMENT(id)
 );
 
-/* ³¯Â¥
+/* ï¿½ï¿½Â¥
 , 
-, ¿øº» »çÁø ÆÄÀÏ ¸í
-, Thumbnail »çÁø ÆÄÀÏ ¸í
-, ¿øº» »çÁø ÀúÀå °æ·Î 
-, Thumbnail »çÁø ÀúÀå °æ·Î 
-, »çÁø °ü·Ã ºñ°í¶õ
+, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+, Thumbnail ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+, Thumbnail ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 
+, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 */
 CREATE TABLE twomites.FELLOWSHIP_PHOTO(
@@ -87,12 +87,12 @@ CREATE TABLE twomites.FELLOWSHIP_PHOTO(
 	, foreign key (f_id) references twomites.FELLOWSHIP(id)
 );
 
-/*°£Áõ
-±³Á¦_°£Áõ id
-, FK | fellowship Å×ÀÌºí id°ª
-, ¼ºµµ¸í
-, °£Áõ
-, ¼ºº°
+/*ï¿½ï¿½ï¿½ï¿½
+ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ id
+, FK | fellowship ï¿½ï¿½ï¿½Ìºï¿½ idï¿½ï¿½
+, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+, ï¿½ï¿½ï¿½ï¿½
+, ï¿½ï¿½ï¿½ï¿½
 */
 CREATE TABLE twomites.FELLOWSHIP_TESTIMONY(
   id INT auto_increment primary KEY

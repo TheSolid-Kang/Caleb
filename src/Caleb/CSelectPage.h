@@ -7,11 +7,15 @@ public:
 	~CSelectPage();
 
 private:
-	std::list<TString> m_list_page;
-
+	enum class FUNC : size_t { ROOT = static_cast<size_t>(COMMON_FUNC::END)
+		, END };
+	enum class SELECTED_FUNC : size_t{ ROOT = static_cast<size_t>(COMMON_SELECTED_FUNC::END)
+		, END };
+	
 private:
-	// CPage��(��) ���� ��ӵ�
 	void initialize(void) override;
+	void init_func(void) override;
+	void init_selected_func(void) override;
 	void render(void) override;
 	int update(int _event) override;
 	void release(void) override;

@@ -16,12 +16,20 @@ void CUpdatePage::initialize(void)
 		, _T("3. ")
 		, _T("")
 		, _T("99. EXIT"));
-	m_list_note.insert(m_list_note.end(), arr_note.begin(), arr_note.end());
+	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
+}
+
+void CUpdatePage::init_func(void)
+{
+}
+
+void CUpdatePage::init_selected_func(void)
+{
 }
 
 void CUpdatePage::render(void)
 {
-	std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](auto _note) {std::tcout << _note << std::endl; });
+	(*m_uniq_map_selected_func)[static_cast<size_t>(COMMON_SELECTED_FUNC::PRINT_TITLE)](nullptr);
 }
 
 int CUpdatePage::update(int _event)

@@ -13,22 +13,30 @@ void CInsertPage::initialize(void)
 {
 	auto arr_note = build_array(
 		_T("1. 오늘자 일기 생성")
-		, _T("2. 사용자 정의 일기 생성(생성 결과 예시: 221127.TXT)")
+		, _T("2. 사용자 정의 일기 생성(생성 결과 예시: 230101.txt)")
 		, _T("3. ")
 		, _T("")
 		, _T("99. EXIT"));
-	m_list_note.insert(m_list_note.end(), arr_note.begin(), arr_note.end());
+	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
+}
+
+void CInsertPage::init_func(void)
+{
+}
+
+void CInsertPage::init_selected_func(void)
+{
 }
 
 void CInsertPage::render(void)
 {
-	std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](auto _note) {std::tcout << _note << std::endl; });
+	(*m_uniq_map_selected_func)[static_cast<size_t>(COMMON_SELECTED_FUNC::PRINT_TITLE)](nullptr);
 }
 
 int CInsertPage::update(int _event)
 {
 	int selected_event = CIO::ask_and_return_integer();
-	if(selected_event > 0 && selected_event < m_list_note.size() - 1)
+	if(selected_event > 0 && selected_event < m_list_title.size() - 1)
 		CreateDiary(selected_event);
 
 
@@ -37,7 +45,7 @@ int CInsertPage::update(int _event)
 
 void CInsertPage::release(void)
 {
-	m_list_note.clear();
+	m_list_title.clear();
 }
 
 /// <summary>

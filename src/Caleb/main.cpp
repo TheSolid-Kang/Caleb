@@ -4,7 +4,7 @@
 
 #include <locale.h>
 int main() {
-	setlocale(LC_ALL, ""); // ?�� ��µǴ� ���� ����
+	setlocale(LC_ALL, ""); 
 	/*
 #ifdef _WIN32
 	SetConsoleOutputCP(CP_UTF8); // == std::locale::global(std::locale(".UTF-8"));

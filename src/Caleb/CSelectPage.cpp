@@ -17,12 +17,21 @@ void CSelectPage::initialize(void)
     , _T("5. Setting Page")
     , _T("6. Test Page")
     , _T("99.EXIT"));
-  m_list_page.insert(m_list_page.end(), arr_page.begin(), arr_page.end());
+  m_list_title.insert(m_list_title.end(), arr_page.begin(), arr_page.end());
+}
+
+void CSelectPage::init_func(void)
+{
+}
+
+void CSelectPage::init_selected_func(void)
+{
+
 }
 
 void CSelectPage::render(void)
 {
-  std::for_each(m_list_page.cbegin(), m_list_page.cend(), [](auto _ch_page) {std::tcout << _ch_page << std::endl; });
+  (*m_uniq_map_selected_func)[static_cast<size_t>(COMMON_SELECTED_FUNC::PRINT_TITLE)](nullptr);
 }
 
 int CSelectPage::update(int _event = 0)

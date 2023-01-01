@@ -14,17 +14,25 @@ void CRecordPage::initialize(void)
 {
   auto vec_section = CDiaryMgr::GetInstance().GetVecSection();
   int i = 0;
-  m_list_note.insert(m_list_note.end(), vec_section.cbegin(), vec_section.cend());
-  std::for_each(m_list_note.begin(), m_list_note.end(), [&i](TString& _note) { _note = std::to_tstring(i++) + _T(". ") + _note; });
+  m_list_title.insert(m_list_title.end(), vec_section.cbegin(), vec_section.cend());
+  std::for_each(m_list_title.begin(), m_list_title.end(), [&i](TString& _note) { _note = std::to_tstring(i++) + _T(". ") + _note; });
 
-  //m_list_note.emplace_front(typeid(*this).name());
-  m_list_note.emplace_back(_T("99. EXIT"));
+  //m_list_title.emplace_front(typeid(*this).name());
+  m_list_title.emplace_back(_T("99. EXIT"));
+}
+
+void CRecordPage::init_func(void)
+{
+}
+
+void CRecordPage::init_selected_func(void)
+{
 }
 
 void CRecordPage::init_note(void) noexcept
 {
-  if (0 != m_list_note.size())
-    m_list_note.clear();
+  if (0 != m_list_title.size())
+    m_list_title.clear();
   auto dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
   m_vec_file_name = CFIOMgr::GetFilesInDirectory(dir_path);
   std::reverse(m_vec_file_name.begin(), m_vec_file_name.end());
@@ -32,14 +40,14 @@ void CRecordPage::init_note(void) noexcept
   int i = 0;
   std::for_each(m_vec_file_name.cbegin(), m_vec_file_name.cend(), [&](const TString& _file_name) {
     size_t index = _file_name.find_last_of(_T("\\")) + 1;
-    m_list_note.emplace_back(std::to_tstring(++i) + _T(". ") + _file_name.substr(index, _file_name.size() - index));
+    m_list_title.emplace_back(std::to_tstring(++i) + _T(". ") + _file_name.substr(index, _file_name.size() - index));
     });
-  m_list_note.emplace_back(std::to_tstring(m_vec_file_name.size() + 1) + _T(". EXIT"));
+  m_list_title.emplace_back(std::to_tstring(m_vec_file_name.size() + 1) + _T(". EXIT"));
 }
 
 void CRecordPage::render(void)
 {
-  std::for_each(m_list_note.cbegin(), m_list_note.cend(), [](const TString& _title) {std::tcout << _title << std::endl; });
+  (*m_uniq_map_selected_func)[static_cast<size_t>(COMMON_SELECTED_FUNC::PRINT_TITLE)](nullptr);
 }
 
 int CRecordPage::update(int _event)
