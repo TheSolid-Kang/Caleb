@@ -179,6 +179,15 @@ public:
 		vec_line.shrink_to_fit();
 		return vec_line;
 	}
+
+	//4. Directory 내 파일 읽기2
+	static TString GetFileLines(const TString& _path) {
+		std::vector<TString> vec_line = GetVecFileLines(_path);
+		TString lines;
+		for (const TString& _line : vec_line)
+			lines += _line + _T("\n");
+		return lines;
+	}
 	//5. Directory 내 파일 수정
 
 };

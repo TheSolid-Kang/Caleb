@@ -1,5 +1,7 @@
 #include "CTestPage.h"
 #include "CFileMgr.hpp"
+#include "KMP.h"
+#include "CMyEtc.hpp"
 
 CTestPage::CTestPage() 
 {
@@ -11,9 +13,11 @@ CTestPage::~CTestPage()
 
 void CTestPage::initialize(void)
 {
-	auto arr_note = build_array(_T("1. 선택한 폴더 내 모든 파일 출력")
-		, _T("2. 가계부 선택 및 내용 parsing")
-		, _T("3. ")
+	auto arr_note = build_array(_T("1. 선택한 폴더 내 모든 파일명 출력")
+		, _T("2. 원하는 섹션 보기")
+		, _T("3. 전체 Caleb 읽기")
+		, _T("")
+		, _T("")
 		, _T("")
 		, _T("99. EXIT"));
 	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
@@ -56,11 +60,58 @@ void CTestPage::init_func(void)
 				});
 
 			for (std::pair<TString, TString> pair_note : map_note)
-				std::tcout << pair_note.first << _T("\n") << pair_note.second;
+				//std::tcout << pair_note.first << _T("\n") << pair_note.second;
+				std::tcout << pair_note.first << _T("\n");
 
 			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::THREE)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+
+			//0. 변수 초기화
+			//TString caleb_root_path = CFileMgr::GetOpenFolderDialg(); //잘 됨.
+			TString caleb_root_path = _T("C:\\Caleb\\CalebRecord");
+			//  vector 컨테이너에 CalebRecord에 담긴 파일 path 입력
+			auto vec_caleb_path = CFIOMgr::GetFilesInDirectory(caleb_root_path);
+			std::map<TString, std::map<TString, int>> map_cnt;
+
+			//1. 검색어 설정
+			//auto search_key = CIO::ask_and_return_string(); //잘 안 됨.
+			std::list<TString> list_search_key;
+			
+
+			list_search_key.emplace_back(_T("은아"));
+			list_search_key.emplace_back(_T("결혼"));
+			list_search_key.emplace_back(_T("사랑"));
+			list_search_key.emplace_back(_T("절망"));
+
+			TString wstr_arr_keyword = CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
+			auto vec_keyword = CMyEtc::Split(wstr_arr_keyword, _T('|'));
+			for (const TString& _search_key : vec_keyword)
+				list_search_key.emplace_back(_search_key);
+
+			//2. Caleb 내에서 검색 횟수 확인
+			//  1) 컨테이너에서 caleb_path 선택
+			for (const TString& _caleb_path : vec_caleb_path)
+			{
+				//  2) caleb.txt 파일에 담긴 모든 내용 입력
+				TString caleb = CFIOMgr::GetFileLines(_caleb_path);
+				for (TString _search_key : list_search_key)
+				{
+					//  3) 한 Caleb에서 검색어 별 언급횟수 확인 및 입력
+					auto uniq_vec_address = KMP::GetSearchedAddress(caleb, _search_key);
+					if ((*uniq_vec_address).size() != 0)
+						map_cnt[_caleb_path][_search_key] += (*uniq_vec_address).size();
+				}
+			}
+			//3. Console창에 각각의 Caleb에서 검색어 별 언급횟수 출력
+			for (std::pair<TString, std::map<TString, int>> _pair_cnt : map_cnt)
+			{
+				std::tcout << _T("=====") << _pair_cnt.first << _T("=====") << std::endl;
+				for (std::pair<TString, int> _pair : _pair_cnt.second)
+					std::tcout << _T("    ") << _pair.first << _T(" == ") << _pair.second << std::endl;
+			}
+
+			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FOUR)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FIVE)
@@ -78,7 +129,9 @@ void CTestPage::init_selected_func(void)
 			(*m_uniq_map_func)[static_cast<size_t>(FUNC::TWO)](nullptr);
 			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::THREE)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			(*m_uniq_map_func)[static_cast<size_t>(FUNC::THREE)](nullptr);
+			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FOUR)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FIVE)

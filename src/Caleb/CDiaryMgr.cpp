@@ -22,6 +22,7 @@ void CDiaryMgr::initialize(void)
 
 void CDiaryMgr::init_key(void)
 {
+	//파일 명칭 다 가져오기
 	TString diary_dir_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
 	std::vector<TString> vec_file_name = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::for_each(vec_file_name.rbegin(), vec_file_name.rend(), [&](auto& _file_name) {m_map_diary[_file_name]; });
@@ -49,23 +50,23 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 	if (diary == _T("No files."))
 		return _T("No files.");
 
-	//1. Section 
+	//1. Section 값 초기화
 	TString section_begin = _T("<--") + _section + _T("-->");
 	TString section_last = _T("<--End ") + _section + _T("-->");
 
-	//2. ���ڿ� �� index 
+	//2. 문자열 내 index 초기화 
 	auto index_first = diary.find(section_begin);
 	auto index_last = diary.rfind(section_last);
 	if (index_first == TString::npos || index_last == TString::npos)
 	{
-		//throw new std::exception("record�� �������� �ʴ� section�Դϴ�.");// find ���� �� �� ���ڿ��� �ִٸ� �Լ� ����
-		//�ش� ���Ͽ� SECTION ����
+		//throw new std::exception("record에 존재하지 않는 section입니다.");// find 하지 못 한 문자열이 있다면 함수 종료
+		//해당 파일에 SECTION 생성
 		auto vec_section = GetVecSection();
 		auto iter = std::find(vec_section.cbegin(), vec_section.cend(), _section);
-		if (iter == vec_section.cend())//ini�� �ش� section�� ���ٸ� return;
+		if (iter == vec_section.cend())//ini에 해당 section이 없다면 return;
 			return _T("");
 
-		//ini�� �ش� sectino�� �ִٸ� ������ ������ �ٿ� �ش� section�� ���� �� return.
+		//ini에 해당 sectino이 있다면 파일의 마지막 줄에 해당 section을 만든 후 return.
 		m_map_diary[_diary_file_path].append(section_begin);
 		m_map_diary[_diary_file_path].append(_T("\n"));
 		m_map_diary[_diary_file_path].append(section_last);
@@ -79,7 +80,7 @@ TString CDiaryMgr::GetDiarySelectedSection(const TString& _diary_file_path, cons
 	index_first += section_begin.length();
 	index_last -= index_first;
 
-	//3. ���ڿ��� index ��ŭ �ڸ� �� ��ȯ
+	//3. 문자열을 index 만큼 자른 후 반환
 	return diary.substr(index_first, index_last);
 
 }
@@ -97,7 +98,7 @@ TString& CDiaryMgr::GetDiary(const TString& _diary_file_path)
 	if (TString::npos == _diary_file_path.find(diary_dir_path))
 		const_cast<TString&>(_diary_file_path).append(_T("\\") + _diary_file_path);
 
-	//1. ��� �� _diary_name�� ��ġ�ϴ� ������ �ִ��� Ȯ��
+	//1. 목록 내 _diary_name과 일치하는 파일이 있는지 확인
 	auto vec_file_path = CFIOMgr::GetFilesInDirectory(diary_dir_path);
 	std::vector<TString>::const_iterator citer = std::find(vec_file_path.cbegin(), vec_file_path.cend(), _diary_file_path);
 	if (citer == vec_file_path.cend())
@@ -105,18 +106,18 @@ TString& CDiaryMgr::GetDiary(const TString& _diary_file_path)
 		result = _T("No files.");
 		return result;
 	}
-	//2. �ش� key�� value�� �ʱ�ȭ �Ǿ����� Ȯ��
+	//2. 해당 key의 value가 초기화 되었는지 확인
 	if (m_map_diary[_diary_file_path]._Equal(_T("")))
 		InitDiary(_diary_file_path);
 
-	//3. diary_name�� ��ġ�ϴ� ���Ͽ��� ������ ��������
+	//3. diary_name과 일치하는 파일에서 데이터 가져오기
 	return m_map_diary[_diary_file_path];
 }
 
 std::map<TString, int> CDiaryMgr::GetMapWordCount(const TString& _diary_file_path, const TString& _section)
 {
 	TString section_record = GetDiarySelectedSection(_diary_file_path, _section);
-	//praise ���ǿ��� ��� �ܾ� �˻�
+	//praise 섹션에서 언급 단어 검색
 	TString wstr_arr_keyword = CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
 	auto vec_keyword = CMyEtc::Split(wstr_arr_keyword, _T('|'));
 
