@@ -24,6 +24,7 @@ void CTestPage::initialize(void)
 }
 
 
+
 void CTestPage::init_func(void)
 {
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::ONE)
