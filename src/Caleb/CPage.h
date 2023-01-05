@@ -45,6 +45,7 @@ protected:
 	virtual void render(void) override;
 	virtual void render(const void* _p_void) override;
 	void render(TString& _str) override;
+	void render(TString&& _str) { render(_str); };
 	virtual int update(int _event) override;
 	virtual void release(void) override;
 

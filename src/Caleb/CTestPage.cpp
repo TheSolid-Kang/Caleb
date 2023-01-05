@@ -80,7 +80,6 @@ void CTestPage::init_func(void)
 			//auto search_key = CIO::ask_and_return_string(); //잘 안 됨.
 			std::list<TString> list_search_key;
 			
-
 			list_search_key.emplace_back(_T("은아"));
 			list_search_key.emplace_back(_T("결혼"));
 			list_search_key.emplace_back(_T("사랑"));
@@ -108,9 +107,9 @@ void CTestPage::init_func(void)
 			//3. Console창에 각각의 Caleb에서 검색어 별 언급횟수 출력
 			for (std::pair<TString, std::map<TString, int>> _pair_cnt : map_cnt)
 			{
-				std::tcout << _T("=====") << _pair_cnt.first << _T("=====") << std::endl;
+				CPage::render( _T("=====") + _pair_cnt.first + _T("====="));
 				for (std::pair<TString, int> _pair : _pair_cnt.second)
-					std::tcout << _T("    ") << _pair.first << _T(" == ") << _pair.second << std::endl;
+					CPage::render(_T("    ") + _pair.first + _T(" == ") + std::to_tstring(_pair.second) );
 			}
 
 			return nullptr; }));
