@@ -23,6 +23,7 @@ void CTestPage::initialize(void)
 	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
 }
 
+
 void CTestPage::init_func(void)
 {
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::ONE)
