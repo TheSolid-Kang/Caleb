@@ -15,8 +15,7 @@ void CTestPage::initialize(void)
 {
 	auto arr_note = build_array(_T("1. 선택한 폴더 내 모든 파일명 출력")
 		, _T("2. 원하는 섹션 보기")
-		, _T("3. 전체 Caleb 읽기")
-		, _T("")
+		, _T("3. 전체 Caleb 읽고 언급횟수 확인")
 		, _T("")
 		, _T("")
 		, _T("99. EXIT"));
@@ -79,13 +78,7 @@ void CTestPage::init_func(void)
 			//1. 검색어 설정
 			//auto search_key = CIO::ask_and_return_string(); //잘 안 됨.
 			std::list<TString> list_search_key;
-			
-			list_search_key.emplace_back(_T("은아"));
-			list_search_key.emplace_back(_T("결혼"));
-			list_search_key.emplace_back(_T("사랑"));
-			list_search_key.emplace_back(_T("절망"));
-
-			TString wstr_arr_keyword = CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
+						TString wstr_arr_keyword = CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"));
 			auto vec_keyword = CMyEtc::Split(wstr_arr_keyword, _T('|'));
 			for (const TString& _search_key : vec_keyword)
 				list_search_key.emplace_back(_search_key);
@@ -104,13 +97,22 @@ void CTestPage::init_func(void)
 						map_cnt[_caleb_path][_search_key] += (*uniq_vec_address).size();
 				}
 			}
+			std::map<TString, int> map_total_cnt;
 			//3. Console창에 각각의 Caleb에서 검색어 별 언급횟수 출력
 			for (std::pair<TString, std::map<TString, int>> _pair_cnt : map_cnt)
 			{
 				CPage::render( _T("=====") + _pair_cnt.first + _T("====="));
 				for (std::pair<TString, int> _pair : _pair_cnt.second)
-					CPage::render(_T("    ") + _pair.first + _T(" == ") + std::to_tstring(_pair.second) );
+				{
+					CPage::render(_T("    ") + _pair.first + _T(" == ") + std::to_tstring(_pair.second));
+					map_total_cnt[_pair.first] += _pair.second;
+				}
 			}
+
+			//4. 전체 언급횟수 확인
+			for (std::pair<TString, int> _pair : map_total_cnt)
+				CPage::render(_T("KEY: ") + _pair.first + _T("  |  VALUE: ") + std::to_tstring(_pair.second) + _T("개"));
+
 
 			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FOUR)

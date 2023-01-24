@@ -1,10 +1,19 @@
 #include "CPage.h"
-
-#if _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#include <stdlib.h>
+/*#if _DEBUG
 #define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define malloc(s) _malloc_dbg(s, _NORMAL_BLOCK, __FILE__, __LINE__)
 #endif
-
+*/
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
 CPage::CPage()
 	: m_r_page_mgr(CPageMgr::GetInstance())
 	, m_uniq_map_func(std::make_unique<std::map<size_t, std::function<std::shared_ptr<void>(const void*)>>>())
@@ -50,7 +59,6 @@ void CPage::release(void)
 int CPage::Execute(int _event = 0)
 
 {
-	_CrtDumpMemoryLeaks();
 
 	system("pause");
 	system("cls");
@@ -62,6 +70,8 @@ int CPage::Execute(int _event = 0)
 	render();
 
 	int Update = update(_event);
+	_CrtDumpMemoryLeaks();
+	_CrtSetBreakAlloc(967);
 
 	return Update;
 }

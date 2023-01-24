@@ -1,0 +1,40 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Executables
+*.exe
+*.out
+*.app
+
+# KANG
+.vs/
+bin/
+
+
+# 프로젝트 파일 내 중간 출력물 삭제
+src/Caleb/x64/
+MySQL_DAO_v2/x64/
+PracticeGoogleUnitTest/x64/
