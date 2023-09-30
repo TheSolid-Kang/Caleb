@@ -1,5 +1,5 @@
 #include "CTestPage.h"
-#include "CFileMgr.hpp"
+#include "CFileMgr.h"
 #include "KMP.h"
 #include "CMyEtc.hpp"
 
@@ -16,7 +16,7 @@ void CTestPage::initialize(void)
 	auto arr_note = build_array(_T("1. 선택한 폴더 내 모든 파일명 출력")
 		, _T("2. 원하는 섹션 보기")
 		, _T("3. 전체 Caleb 읽고 언급횟수 확인")
-		, _T("")
+		, _T("4. Record 섹션 MSSQL DB에 넣기")
 		, _T("")
 		, _T("99. EXIT"));
 	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
@@ -116,7 +116,44 @@ void CTestPage::init_func(void)
 
 			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FOUR)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			//0. 변수초기화
+			//  가. calebRecord 파일명 리스트 vector 컨테이너에 담기
+			TString path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_PATH"));
+			//  나. vector 컨테이너에 CalebRecord에 담긴 파일 path 입력
+			auto vec_caleb_path = CFIOMgr::GetFilesInDirectory(path);
+
+
+
+			//1. Record 섹션 데이터 가져오기
+			std::map<TString, TString> listCalebRecord;
+			for (auto& _path : vec_caleb_path) {
+				auto record = CDiaryMgr::GetInstance().GetDiarySelectedSection(_path, _T("Record"));
+				listCalebRecord[_path] = record;
+			}
+
+
+			//2. InserQuery 만들기 
+			//  #temp 테이블 사용
+			StringBuilder strBuil;
+			for (auto& _record : listCalebRecord) {
+				strBuil.Append(_T("INSERT INTO _TCDiary(ChurchSeq, InDate, Title, Record, Remark, LastUserSeq, LastDateTime) VALUE("));
+				strBuil.Append(_T("1 ")); //ChurchSeq
+				strBuil.Append(_T(",'") + _record.first + _T("'")); // InDate: DiaryPath의 마지막 일자.
+				strBuil.Append(_T(",''")); // Title: 없음.
+				strBuil.Append(_T(",'") + _record.second + _T("'")); // Record
+				strBuil.Append(_T(",''")); // Remark: 없음.
+				strBuil.Append(_T(", 2")); //LastUserSeq: 2 == 강태경
+				strBuil.Append(_T(", GETDATE()")); //LastDateTime
+				strBuil.Append_endl(_T(");"));
+			}
+
+			//3. InserQuery sql 파일 제작
+			//CFileMgr::
+
+			
+			
+			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FIVE)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
 }
@@ -136,7 +173,9 @@ void CTestPage::init_selected_func(void)
 			(*m_uniq_map_func)[static_cast<size_t>(FUNC::THREE)](nullptr);
 			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FOUR)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			(*m_uniq_map_func)[static_cast<size_t>(FUNC::FOUR)](nullptr);
+			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FIVE)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
 }

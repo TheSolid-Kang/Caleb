@@ -93,6 +93,15 @@
     <ClCompile Include="CTestPage.cpp">
       <Filter>01.CPage\05. CTestPage</Filter>
     </ClCompile>
+    <ClCompile Include="MSSQLMgr.cpp">
+      <Filter>99.Default\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>99.Default\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StringEditor.cpp">
+      <Filter>99.Default\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Headers.h">
@@ -149,7 +158,7 @@
     <ClInclude Include="CUpdatePage.h">
       <Filter>01.CPage\03.CUpdatePage</Filter>
     </ClInclude>
-    <ClInclude Include="CFileMgr.hpp">
+    <ClInclude Include="CFileMgr.h">
       <Filter>98.Headers\02.CFileMgr</Filter>
     </ClInclude>
     <ClInclude Include="CFIOMgr.hpp">
@@ -158,10 +167,23 @@
     <ClInclude Include="CTestPage.h">
       <Filter>01.CPage\05. CTestPage</Filter>
     </ClInclude>
+    <ClInclude Include="MSSQLMgr.h">
+      <Filter>99.Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>99.Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StringEditor.h">
+      <Filter>99.Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DEFAULT_MGR.h">
+      <Filter>98.Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="edit.txt">
       <Filter>00.main</Filter>
     </Text>
+    <Text Include="텍스트.txt" />
   </ItemGroup>
 </Project>

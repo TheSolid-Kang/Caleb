@@ -31,4 +31,6 @@ private:
 	void PrintSelectedDairy(int _selected_diary);
 
 
+
+
 };

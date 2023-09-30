@@ -1,0 +1,52 @@
+
+
+USE [Caleb]
+GO
+
+/****** Object:  Table [dbo].[_TCMission]    Script Date: 2023-09-29 오후 4:55:47 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[_TCMission](
+	[ChurchSeq] [int] NOT NULL,
+	[DiarySeq] [int] NULL,
+	[MissionSeq] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [nvarchar](512) NULL,
+	[CategoryMMCode] [int] NULL,
+	[Result] [tinyint] NULL,
+	[Remark] [nvarchar](200) NULL,
+	[LastUserSeq] [int] NULL,
+	[LastDateTime] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MissionSeq] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+
+/*테이블 및 컬럼 코멘트 추가*/
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션', 'USER', DBO, 'TABLE', _TCMission ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '교회내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', ChurchSeq ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '일기내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', DiarySeq ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', MissionSeq ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션제목', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Title;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션Major-Minor코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', CategoryMMCode;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션결과', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Result;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '비고', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Remark ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '최종작업자', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', LastUserSeq ;
+EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '최종작업일시', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', LastDateTime ;
+
+
+/*테이블 조회*/
+  SELECT *
+  FROM ::FN_LISTEXTENDEDPROPERTY (NULL, 'SCHEMA', 'DBO', 'TABLE', '_TCMission', DEFAULT, DEFAULT)
+/*컬럼명 조회*/
+  SELECT *
+  FROM ::FN_LISTEXTENDEDPROPERTY (NULL, 'SCHEMA', 'DBO', 'TABLE', '_TCMission', 'COLUMN', DEFAULT)
+
+  

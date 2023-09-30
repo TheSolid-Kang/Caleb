@@ -36,7 +36,7 @@ bool CDiaryMgr::InitDiary(const TString& _diary_file_path) noexcept
 
 	auto vec_line = CFIOMgr::GetVecFileLines(_diary_file_path);
 	StringBuilder str_buil;
-	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const TString& _line) {str_buil.append_endl(_line); });
+	std::for_each(vec_line.cbegin(), vec_line.cend(), [&str_buil](const TString& _line) {str_buil.Append_endl(_line); });
 
 	m_map_diary[_diary_file_path] = str_buil.str();
 

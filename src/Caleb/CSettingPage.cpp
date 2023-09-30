@@ -64,12 +64,12 @@ void CSettingPage::DefaultSet(void)
 	StringBuilder str_buil;
 	std::for_each(vec_section.cbegin(), vec_section.cend()
 		, [&str_buil](const TString& _str_section) {
-			str_buil.append_endl(_T("<--") + _str_section + _T("-->"));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T("<--End ") + _str_section + _T("-->"));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T(""));
+			str_buil.Append_endl(_T("<--") + _str_section + _T("-->"));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T("<--End ") + _str_section + _T("-->"));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T(""));
 		});
 	CFIOMgr::CreateDirectorys(exe_path + _T("\\Form\\"));
 	TString diary_form_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
@@ -80,12 +80,12 @@ void CSettingPage::DefaultSet(void)
 	str_buil.clear();
 	std::for_each(vec_section.cbegin(), vec_section.cend()
 		, [&str_buil](const TString& _str_section) {
-			str_buil.append_endl(_T("<--") + _str_section + _T("-->"));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T("<--End ") + _str_section + _T("-->"));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T(""));
-			str_buil.append_endl(_T(""));
+			str_buil.Append_endl(_T("<--") + _str_section + _T("-->"));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T("<--End ") + _str_section + _T("-->"));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T(""));
+			str_buil.Append_endl(_T(""));
 		});
 	CFIOMgr::CreateDirectorys(exe_path + _T("\\Form\\"));
 	TString caleb_form_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("CALEB_FORM_PATH"));

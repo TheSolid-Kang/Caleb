@@ -77,8 +77,10 @@ void CInsertPage::CreateDiary(int _iSelectedEvent)
 	TString form_path = CINIMgr::GetPrivateProfileString_INI(_T("PATH"), _T("DIARY_FORM_PATH"));
 	auto vec_line = CFIOMgr::GetVecFileLines(form_path);
 	StringBuilder str_buil_line;
-	std::for_each(vec_line.cbegin(), vec_line.cend(), [&](auto _line) {str_buil_line.append_endl(_line); });
+	std::for_each(vec_line.cbegin(), vec_line.cend(), [&](auto _line) {str_buil_line.Append_endl(_line); });
 
+	str_buil_line.Append_endl(_T("# 묵상"));
+	str_buil_line.Append_endl(_T("# 기도"));
 	//4. 만들어진 파일에 양식에 담긴 데이터 넣기
 	TString full_path = path + _T("\\") + str_file_name;
 	CFIOMgr::WriteText(full_path, str_buil_line.str());
@@ -107,27 +109,27 @@ TString CInsertPage::CreateName(int _iSelectedEvent)
 		//struct tm t_tm = *localtime(&t_cur_time);
 		
 		//year
-		str_buil.append(std::to_tstring(t_tm.tm_year - 100)); //-100�� ����: 1900�⵵�����̹Ƿ� 100���� �������� �����⿡  
+		str_buil.Append(std::to_tstring(t_tm.tm_year - 100)); //-100�� ����: 1900�⵵�����̹Ƿ� 100���� �������� �����⿡  
 		
 		//month
 		if(t_tm.tm_mon + 1 > 10)
-			str_buil.append(std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
+			str_buil.Append(std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
 		else
-			str_buil.append(_T("0") + std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
+			str_buil.Append(_T("0") + std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
 		
 		//day
 		if(t_tm.tm_mday >= 10)
-			str_buil.append(std::to_tstring(t_tm.tm_mday));
+			str_buil.Append(std::to_tstring(t_tm.tm_mday));
 		else
-			str_buil.append(_T("0") + std::to_tstring(t_tm.tm_mday));
+			str_buil.Append(_T("0") + std::to_tstring(t_tm.tm_mday));
 
 		break;
 	case 2://사용자 정의 일기 생성(생성 결과 예시: 221127.TXT)
-		str_buil.append(std::to_tstring(CIO::ask_and_return_integer(_T("입력(예시 221127): "))));
+		str_buil.Append(std::to_tstring(CIO::ask_and_return_integer(_T("입력(예시 221127): "))));
 		
 		break;
 	}
-	str_buil.append(_T(".TXT"));
+	str_buil.Append(_T(".TXT"));
 
 	return str_buil.str();
 }

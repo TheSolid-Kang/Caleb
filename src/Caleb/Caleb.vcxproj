@@ -228,40 +228,48 @@
     <ClCompile Include="CCalebMgr.cpp" />
     <ClCompile Include="CDiaryMgr.cpp" />
     <ClCompile Include="CInsertPage.cpp" />
+    <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CPage.cpp" />
     <ClCompile Include="CPageMgr.cpp" />
     <ClCompile Include="CRecordPage.cpp" />
     <ClCompile Include="CSelectPage.cpp" />
     <ClCompile Include="CSettingPage.cpp" />
+    <ClCompile Include="StringEditor.cpp" />
     <ClCompile Include="CTestPage.cpp" />
     <ClCompile Include="CUpdatePage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MSSQLMgr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCalebMgr.h" />
     <ClInclude Include="CDiaryMgr.h" />
-    <ClInclude Include="CFileMgr.hpp" />
+    <ClInclude Include="CFileMgr.h" />
     <ClInclude Include="CINIMgr.hpp" />
     <ClInclude Include="CInsertPage.h" />
     <ClInclude Include="CIO.h" />
+    <ClInclude Include="CLogger.h" />
     <ClInclude Include="CPage.h" />
     <ClInclude Include="CPageMgr.h" />
     <ClInclude Include="CRecordPage.h" />
     <ClInclude Include="CSelectPage.h" />
     <ClInclude Include="CSettingPage.h" />
+    <ClInclude Include="StringEditor.h" />
     <ClInclude Include="CTestPage.h" />
     <ClInclude Include="CUpdatePage.h" />
+    <ClInclude Include="DEFAULT_MGR.h" />
     <ClInclude Include="Enums.h" />
     <ClInclude Include="CFIOMgr.hpp" />
     <ClInclude Include="Headers.h" />
     <ClInclude Include="KMP.h" />
     <ClInclude Include="CMyEtc.hpp" />
     <ClInclude Include="CSetting.hpp" />
+    <ClInclude Include="MSSQLMgr.h" />
     <ClInclude Include="StringBuilder.h" />
     <ClInclude Include="Values.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="edit.txt" />
+    <Text Include="텍스트.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -82,7 +82,7 @@ void CRecordPage::PrintSelectedDairy(int _selected_diary)
   system("cls");
   TString selected_file_path = m_vec_file_name[_selected_diary - 1];
   std::tcout << selected_file_path << std::endl;
-
+  
   auto diary = CDiaryMgr::GetInstance().GetDiarySelectedSection(selected_file_path, m_strDiarySection);
   std::tcout << diary << std::endl;
   

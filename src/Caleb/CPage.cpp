@@ -81,7 +81,7 @@ void CPage::init_func(void)
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(COMMON_FUNC::PRINT_TITLE),
 		[&](const void* _p_void) -> std::shared_ptr<void> {
 			StringBuilder str_buil;
-			std::for_each(m_list_title.cbegin(), m_list_title.cend(), [&str_buil](const TString& _ch_page) { str_buil.append_endl(_ch_page); });
+			std::for_each(m_list_title.cbegin(), m_list_title.cend(), [&str_buil](const TString& _ch_page) { str_buil.Append_endl(_ch_page); });
 
 			TString title = str_buil.str();
 			auto shar_title = std::make_shared<TString>(title);

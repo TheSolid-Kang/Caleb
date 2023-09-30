@@ -109,21 +109,21 @@ CREATE TABLE twomites.FELLOWSHIP_TESTIMONY(
 
 
 
-str_buil.append_endl("<--Mission-->      ");
-str_buil.append_endl("1.                 ");
-str_buil.append_endl("2.                 ");
-str_buil.append_endl("3.                 ");
-str_buil.append_endl("4.                 ");
-str_buil.append_endl("5.                 ");
-str_buil.append_endl("");
-str_buil.append_endl("<--End Mission-->  ");
-str_buil.append_endl("");
-str_buil.append_endl("<--Record-->       ");
-str_buil.append_endl("");
-str_buil.append_endl("");
-str_buil.append_endl("<--End Record-->   ");
-str_buil.append_endl("");
-str_buil.append_endl("<--The Words-->    ");
-str_buil.append_endl("");
-str_buil.append_endl("");
-str_buil.append_endl("<--End The Words-->");
+str_buil.Append_endl("<--Mission-->      ");
+str_buil.Append_endl("1.                 ");
+str_buil.Append_endl("2.                 ");
+str_buil.Append_endl("3.                 ");
+str_buil.Append_endl("4.                 ");
+str_buil.Append_endl("5.                 ");
+str_buil.Append_endl("");
+str_buil.Append_endl("<--End Mission-->  ");
+str_buil.Append_endl("");
+str_buil.Append_endl("<--Record-->       ");
+str_buil.Append_endl("");
+str_buil.Append_endl("");
+str_buil.Append_endl("<--End Record-->   ");
+str_buil.Append_endl("");
+str_buil.Append_endl("<--The Words-->    ");
+str_buil.Append_endl("");
+str_buil.Append_endl("");
+str_buil.Append_endl("<--End The Words-->");
