@@ -619,4 +619,10 @@ public:
 		return wstr;
 	}
 
+	static TString GetFileName(const TString& _filePath) {
+		auto fileName = _filePath.substr(_filePath.find_last_of(_T("\\")) + 1, _filePath.size() - _filePath.find(_T("\\")));
+		fileName = fileName.substr(0, fileName.find_last_of(_T(".")) );
+		return fileName;
+	}
+	
 };
