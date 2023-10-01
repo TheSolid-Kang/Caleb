@@ -144,43 +144,87 @@ void CTestPage::init_func(void)
 
 			strBuil.Append_endl(_T("USE [Caleb]"));
 			strBuil.Append_endl(_T("BEGIN"));
-			strBuil.Append_endl(_T("IF OBJECT_ID(N'TEMPDB..#TCDiary') IS NOT NULL"));
-			strBuil.Append_endl(_T("  DROP TABLE #TCDiary"));
-			strBuil.Append_endl(_T("CREATE TABLE #TCDiary( "));
-			strBuil.Append_endl(_T("	[ChurchSeq] [int] NULL,--교회내부코드 "));
-			strBuil.Append_endl(_T("	[DiarySeq] [int] NULL, --일기 고유키 "));
-			strBuil.Append_endl(_T("	[InDate] [DATE] NULL, --일기 일자 "));
-			strBuil.Append_endl(_T("	[Title] [nvarchar](256) NULL, --일기 제목 "));
-			strBuil.Append_endl(_T("	[Record] [nvarchar](max) NULL, --일기 "));
-			strBuil.Append_endl(_T("	[Remark] [nvarchar](200) NULL, --비고 "));
-			strBuil.Append_endl(_T("	[LastUserSeq] [int] NULL, --최종작업자 "));
-			strBuil.Append_endl(_T("	[LastDateTime] [datetime] NULL --최종작업일시 "));
-			strBuil.Append_endl(_T("); "));
+			strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#TCDiary') IS NOT NULL"));
+			strBuil.Append_endl(_T("	  DROP TABLE #TCDiary"));
+			strBuil.Append_endl(_T("	CREATE TABLE #TCDiary( "));
+			strBuil.Append_endl(_T("		[ChurchSeq] [int] NULL,--교회내부코드 "));
+			strBuil.Append_endl(_T("		[DiarySeq] [int] NULL, --일기 고유키 "));
+			strBuil.Append_endl(_T("		[InDate] [DATE] NULL, --일기 일자 "));
+			strBuil.Append_endl(_T("		[Title] [nvarchar](256) NULL, --일기 제목 "));
+			strBuil.Append_endl(_T("		[Record] [nvarchar](max) NULL, --일기 "));
+			strBuil.Append_endl(_T("		[Remark] [nvarchar](200) NULL, --비고 "));
+			strBuil.Append_endl(_T("		[LastUserSeq] [int] NULL, --최종작업자 "));
+			strBuil.Append_endl(_T("		[LastDateTime] [datetime] NULL --최종작업일시 "));
+			strBuil.Append_endl(_T("	); "));
 			for (auto& _record : listCalebRecord) {
-				strBuil.Append(_T("INSERT INTO #TCDiary(ChurchSeq, InDate, Title, Record, Remark, LastUserSeq, LastDateTime) VALUES("));
-				strBuil.Append(_T("1")); //ChurchSeq
-				strBuil.Append(_T(",") + _record.first ); // InDate: DiaryPath의 마지막 일자.
-				strBuil.Append(_T(",N''")); // Title: 없음.
-				strBuil.Append(_T(",N'") + _record.second + _T("'")); // Record
-				strBuil.Append(_T(",N''")); // Remark: 없음.
-				strBuil.Append(_T(", 2")); //LastUserSeq: 2 == 강태경
-				strBuil.Append(_T(", GETDATE()")); //LastDateTime
-				strBuil.Append_endl(_T(");"));
+				strBuil.Append(_T("	INSERT INTO #TCDiary(ChurchSeq, InDate, Title, Record, Remark, LastUserSeq, LastDateTime) VALUES("));
+				strBuil.Append(_T("	1")); //ChurchSeq
+				strBuil.Append(_T("	,") + _record.first ); // InDate: DiaryPath의 마지막 일자.
+				strBuil.Append(_T("	,N''")); // Title: 없음.
+				strBuil.Append(_T("	,N'") + _record.second + _T("'")); // Record
+				strBuil.Append(_T("	,N''")); // Remark: 없음.
+				strBuil.Append(_T("	, 2")); //LastUserSeq: 2 == 강태경
+				strBuil.Append(_T("	, GETDATE()")); //LastDateTime
+				strBuil.Append_endl(_T("	);"));
 			}
-			strBuil.Append_endl(_T("SELECT * FROM #TCDiary"));
-			strBuil.Append_endl(_T("BEGIN TRAN "));
-			strBuil.Append_endl(_T("	INSERT INTO _TCDiary(ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime) "));
-			strBuil.Append_endl(_T("	--VALUES(AChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime) "));
-			strBuil.Append_endl(_T("	SELECT ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime "));
-			strBuil.Append_endl(_T("	--INTO _TCDiary(ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime) "));
+
+			strBuil.Append_endl(_T("	SELECT * FROM #TCDiary "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	PRINT 'UPDATE에 사용할 임시 테이블' "));
+			strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#TCDiaryUpdate') IS NOT NULL "));
+			strBuil.Append_endl(_T("		DROP TABLE #TCDiaryUpdate "));
+			strBuil.Append_endl(_T("	SELECT A.ChurchSeq, A.DiarySeq, A.InDate, A.Title, A.Record, A.LastUserSeq, A.LastDateTime "));
+			strBuil.Append_endl(_T("	INTO #TCDiaryUpdate "));
 			strBuil.Append_endl(_T("	FROM #TCDiary AS A "));
-			strBuil.Append_endl(_T("	SELECT * FROM _TCDiary "));
-			strBuil.Append_endl(_T("	ROLLBACK TRAN; "));
-			strBuil.Append_endl(_T("	--COMMIT; "));
-			strBuil.Append_endl(_T("END																																												 "));
-			strBuil.Append_endl(_T("ROLLBACK TRAN;"));
-			strBuil.Append_endl(_T("--COMMIT;"));
-			strBuil.Append_endl(_T("--TRUNCATE TABLE _TCDiary"));
+			strBuil.Append_endl(_T("	INNER JOIN _TCDiary AS B WITH(NOLOCK) ON A.InDate = B.InDate AND A.Record <> B.Record "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	PRINT 'INSERT에 사용할 임시 테이블' "));
+			strBuil.Append_endl(_T("	UPDATE #TCDiary "));
+			strBuil.Append_endl(_T("	SET DiarySeq = B.DiarySeq "));
+			strBuil.Append_endl(_T("	FROM #TCDiary AS A "));
+			strBuil.Append_endl(_T("	INNER JOIN _TCDiary AS B ON A.ChurchSeq = B.ChurchSeq AND A.InDate = B.InDate "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#TCDiaryInsert') IS NOT NULL "));
+			strBuil.Append_endl(_T("		DROP TABLE #TCDiaryInsert "));
+			strBuil.Append_endl(_T("	SELECT A.ChurchSeq, A.InDate, A.Title,A.Record, A.Remark, A.LastUserSeq, A.LastDateTime "));
+			strBuil.Append_endl(_T("	INTO #TCDiaryInsert "));
+			strBuil.Append_endl(_T("	FROM #TCDiary AS A "));
+			strBuil.Append_endl(_T("	WHERE 1=1 "));
+			strBuil.Append_endl(_T("	AND A.DiarySeq IS NULL "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	SELECT * FROM #TCDiary "));
+			strBuil.Append_endl(_T("	ORDER BY DiarySeq "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	SELECT * FROM #TCDiaryUpdate "));
+			strBuil.Append_endl(_T("	SELECT * FROM #TCDiaryInsert "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	BEGIN TRAN "));
+			strBuil.Append_endl(_T("		IF (0 <= (SELECT COUNT(*) FROM #TCDiaryUpdate)) OR (0 <= (SELECT COUNT(*) FROM #TCDiaryInsert )) "));
+			strBuil.Append_endl(_T("		BEGIN "));
+			strBuil.Append_endl(_T("			PRINT 'UPDATE' "));
+			strBuil.Append_endl(_T("			UPDATE _TCDiary "));
+			strBuil.Append_endl(_T("			SET InDate = A.InDate "));
+			strBuil.Append_endl(_T("			, ChurchSeq = A.ChurchSeq"));
+			strBuil.Append_endl(_T("			, Title = A.Title"));
+			strBuil.Append_endl(_T("			, Record = A.Record "));
+			strBuil.Append_endl(_T("			, LastUserSeq = A.LastUserSeq "));
+			strBuil.Append_endl(_T("			, LastDateTime = A.LastDateTime "));
+			strBuil.Append_endl(_T("			FROM #TCDiaryUpdate AS A "));
+			strBuil.Append_endl(_T("			INNER JOIN _TCDiary AS B WITH(NOLOCK) ON A.ChurchSeq = B.ChurchSeq AND A.DiarySeq = B.DiarySeq"));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("			PRINT 'INSERT' "));
+			strBuil.Append_endl(_T("			INSERT INTO _TCDiary(ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime) "));
+			strBuil.Append_endl(_T("			SELECT ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime "));
+			strBuil.Append_endl(_T("			FROM #TCDiaryInsert AS A "));
+			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("			SELECT * FROM _TCDiary "));
+			strBuil.Append_endl(_T("		ROLLBACK TRAN "));
+			strBuil.Append_endl(_T("		--COMMIT; "));
+			strBuil.Append_endl(_T("		END "));
+			strBuil.Append_endl(_T("END "));
+			strBuil.Append_endl(_T("--TRUNCATE TABLE _TCDiary "));
+			strBuil.Append_endl(_T("--DROP TABLE _TCDIARY "));
 
 			//3. InserQuery sql 파일 제작
 			auto savePath = CFileMgr::GetEXEFilePath() + _T("\\InserRecordSQL.sql");

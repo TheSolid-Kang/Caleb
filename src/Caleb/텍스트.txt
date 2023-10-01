@@ -1,52 +1,57 @@
 
-
-USE [Caleb]
-GO
-
-/****** Object:  Table [dbo].[_TCMission]    Script Date: 2023-09-29 오후 4:55:47 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE TABLE [dbo].[_TCMission](
-	[ChurchSeq] [int] NOT NULL,
-	[DiarySeq] [int] NULL,
-	[MissionSeq] [int] IDENTITY(1,1) NOT NULL,
-	[Title] [nvarchar](512) NULL,
-	[CategoryMMCode] [int] NULL,
-	[Result] [tinyint] NULL,
-	[Remark] [nvarchar](200) NULL,
-	[LastUserSeq] [int] NULL,
-	[LastDateTime] [datetime] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[MissionSeq] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-
-
-/*테이블 및 컬럼 코멘트 추가*/
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션', 'USER', DBO, 'TABLE', _TCMission ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '교회내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', ChurchSeq ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '일기내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', DiarySeq ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션내부코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', MissionSeq ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션제목', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Title;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션Major-Minor코드', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', CategoryMMCode;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '미션결과', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Result;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '비고', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', Remark ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '최종작업자', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', LastUserSeq ;
-EXEC   SP_ADDEXTENDEDPROPERTY 'MS_DESCRIPTION', '최종작업일시', 'USER', DBO, 'TABLE', _TCMission , 'COLUMN', LastDateTime ;
-
-
-/*테이블 조회*/
-  SELECT *
-  FROM ::FN_LISTEXTENDEDPROPERTY (NULL, 'SCHEMA', 'DBO', 'TABLE', '_TCMission', DEFAULT, DEFAULT)
-/*컬럼명 조회*/
-  SELECT *
-  FROM ::FN_LISTEXTENDEDPROPERTY (NULL, 'SCHEMA', 'DBO', 'TABLE', '_TCMission', 'COLUMN', DEFAULT)
-
-  
+strBuil.Append_endl(_T("	SELECT * FROM #TCDiary																																									"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	PRINT 'UPDATE에 사용할 임시 테이블'																																		 " ));
+strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#UpdateDiary') IS NOT NULL																												"));
+strBuil.Append_endl(_T("		DROP TABLE #UpdateDiary																																								"));
+strBuil.Append_endl(_T("	SELECT A.InDate, A.Title, A.Record, A.LastUserSeq, A.LastDateTime																				"));
+strBuil.Append_endl(_T("	INTO #UpdateDiary																																												"));
+strBuil.Append_endl(_T("	FROM #TCDiary AS A 																																											"));
+strBuil.Append_endl(_T("	INNER JOIN _TCDiary AS B WITH(NOLOCK) ON A.InDate = B.InDate AND A.Record <> B.Record										"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	PRINT 'INSERT에 사용할 임시 테이블'																																		 " ));
+strBuil.Append_endl(_T("	UPDATE #TCDiary 																																												"));
+strBuil.Append_endl(_T("	SET DiarySeq = B.DiarySeq																																								"));
+strBuil.Append_endl(_T("	FROM #TCDiary AS A 																																											"));
+strBuil.Append_endl(_T("	INNER JOIN _TCDiary AS B ON A.ChurchSeq = B.ChurchSeq AND A.InDate = B.InDate														"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#InsertDiary') IS NOT NULL																												"));
+strBuil.Append_endl(_T("		DROP TABLE #InsertDiary																																								"));
+strBuil.Append_endl(_T("	SELECT A.ChurchSeq, A.InDate, A.Title,A.Record, A.Remark, A.LastUserSeq, A.LastDateTime									"));
+strBuil.Append_endl(_T("	INTO #InsertDiary																																												"));
+strBuil.Append_endl(_T("	FROM #TCDiary AS A 																																											"));
+strBuil.Append_endl(_T("	WHERE 1=1																																																"));
+strBuil.Append_endl(_T("	AND A.DiarySeq IS NULL																																									"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	SELECT * FROM #TCDiary																																									"));
+strBuil.Append_endl(_T("	ORDER BY DiarySeq																																												"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	SELECT * FROM #UpdateDiary																																							"));
+strBuil.Append_endl(_T("	SELECT * FROM #InsertDiary																																							"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("	BEGIN TRAN 																																															"));
+strBuil.Append_endl(_T("		IF (0 <= (SELECT COUNT(*) FROM #UpdateDiary)) OR (0 <= (SELECT COUNT(*) FROM #InsertDiary ))					"));
+strBuil.Append_endl(_T("		BEGIN																																																	"));
+strBuil.Append_endl(_T("			PRINT 'UPDATE'																																											"));
+strBuil.Append_endl(_T("			UPDATE _TCDiary																																											"));
+strBuil.Append_endl(_T("			SET InDate = A.InDate																																								"));
+strBuil.Append_endl(_T("			, Title = A.Title, Record = A.Record																																"));
+strBuil.Append_endl(_T("			, LastUserSeq = A.LastUserSeq																																				"));
+strBuil.Append_endl(_T("			, LastDateTime = A.LastDateTime																																			"));
+strBuil.Append_endl(_T("			FROM #UpdateDiary AS A																																							"));
+strBuil.Append_endl(_T("																																																					"));
+strBuil.Append_endl(_T("			PRINT 'INSERT'																																											"));
+strBuil.Append_endl(_T("			INSERT INTO _TCDiary(ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime) 					"));
+strBuil.Append_endl(_T("			SELECT ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime 													"));
+strBuil.Append_endl(_T("			FROM #InsertDiary AS A 																																							"));
+strBuil.Append_endl(_T("		ROLLBACK TRAN																																													"));
+strBuil.Append_endl(_T("		END																																																		"));
+strBuil.Append_endl(_T("		SELECT * FROM _TCDiary																																								"));
+strBuil.Append_endl(_T("--COMMIT; 																																																"));
+strBuil.Append_endl(_T("ROLLBACK TRAN																																															"));
+strBuil.Append_endl(_T("END																																																				"));
+strBuil.Append_endl(_T("--COMMIT;																																																	"));
+strBuil.Append_endl(_T("--TRUNCATE TABLE _TCDiary																																									"));
+strBuil.Append_endl(_T("--DROP TABLE _TCDIARY																																											"));
+																																																																	"));

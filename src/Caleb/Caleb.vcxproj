@@ -221,7 +221,7 @@
       <AdditionalLibraryDirectories>%BOOST_ROOT%\stage\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /E /Y "$(TargetDir)\*" "C:\Caleb\Release\*";</Command>
+      <Command>xcopy /E /Y "$(TargetDir)*" "C:\Caleb\Release\*";</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
