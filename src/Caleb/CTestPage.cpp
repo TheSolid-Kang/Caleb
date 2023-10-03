@@ -168,13 +168,11 @@ void CTestPage::init_func(void)
 				strBuil.Append_endl(_T("	);"));
 			}
 
-			strBuil.Append_endl(_T("	SELECT * FROM #TCDiary "));
-			strBuil.Append_endl(_T(" "));
 			strBuil.Append_endl(_T(" "));
 			strBuil.Append_endl(_T("	PRINT 'UPDATE에 사용할 임시 테이블' "));
 			strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#TCDiaryUpdate') IS NOT NULL "));
 			strBuil.Append_endl(_T("		DROP TABLE #TCDiaryUpdate "));
-			strBuil.Append_endl(_T("	SELECT A.ChurchSeq, A.DiarySeq, A.InDate, A.Title, A.Record, A.LastUserSeq, A.LastDateTime "));
+			strBuil.Append_endl(_T("	SELECT A.ChurchSeq, B.DiarySeq, A.InDate, A.Title, A.Record, A.LastUserSeq, A.LastDateTime "));
 			strBuil.Append_endl(_T("	INTO #TCDiaryUpdate "));
 			strBuil.Append_endl(_T("	FROM #TCDiary AS A "));
 			strBuil.Append_endl(_T("	INNER JOIN _TCDiary AS B WITH(NOLOCK) ON A.InDate = B.InDate AND A.Record <> B.Record "));
@@ -193,9 +191,7 @@ void CTestPage::init_func(void)
 			strBuil.Append_endl(_T("	WHERE 1=1 "));
 			strBuil.Append_endl(_T("	AND A.DiarySeq IS NULL "));
 			strBuil.Append_endl(_T(" "));
-			strBuil.Append_endl(_T("	SELECT * FROM #TCDiary "));
-			strBuil.Append_endl(_T("	ORDER BY DiarySeq "));
-			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	SELECT * FROM #TCDiary ORDER BY DiarySeq "));
 			strBuil.Append_endl(_T("	SELECT * FROM #TCDiaryUpdate "));
 			strBuil.Append_endl(_T("	SELECT * FROM #TCDiaryInsert "));
 			strBuil.Append_endl(_T(" "));
@@ -218,7 +214,7 @@ void CTestPage::init_func(void)
 			strBuil.Append_endl(_T("			SELECT ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime "));
 			strBuil.Append_endl(_T("			FROM #TCDiaryInsert AS A "));
 			strBuil.Append_endl(_T(" "));
-			strBuil.Append_endl(_T("			SELECT * FROM _TCDiary "));
+			strBuil.Append_endl(_T("			SELECT * FROM _TCDiary ORDER BY LastDateTime DESC"));
 			strBuil.Append_endl(_T("		ROLLBACK TRAN "));
 			strBuil.Append_endl(_T("		--COMMIT; "));
 			strBuil.Append_endl(_T("		END "));
