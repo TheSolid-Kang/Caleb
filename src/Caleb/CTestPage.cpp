@@ -156,6 +156,7 @@ void CTestPage::init_func(void)
 			strBuil.Append_endl(_T("		[LastUserSeq] [int] NULL, --최종작업자 "));
 			strBuil.Append_endl(_T("		[LastDateTime] [datetime] NULL --최종작업일시 "));
 			strBuil.Append_endl(_T("	); "));
+			strBuil.Append_endl(_T("	SET NOCOUNT ON"));
 			for (auto& _record : listCalebRecord) {
 				strBuil.Append(_T("	INSERT INTO #TCDiary(ChurchSeq, InDate, Title, Record, Remark, LastUserSeq, LastDateTime) VALUES("));
 				strBuil.Append(_T("	1")); //ChurchSeq
@@ -169,6 +170,7 @@ void CTestPage::init_func(void)
 			}
 
 			strBuil.Append_endl(_T(" "));
+			strBuil.Append_endl(_T("	SET NOCOUNT OFF"));
 			strBuil.Append_endl(_T("	PRINT 'UPDATE에 사용할 임시 테이블' "));
 			strBuil.Append_endl(_T("	IF OBJECT_ID(N'TEMPDB..#TCDiaryUpdate') IS NOT NULL "));
 			strBuil.Append_endl(_T("		DROP TABLE #TCDiaryUpdate "));

@@ -107,7 +107,7 @@ TString& CDiaryMgr::GetDiary(const TString& _diary_file_path)
 		return result;
 	}
 	//2. 해당 key의 value가 초기화 되었는지 확인
-	if (m_map_diary[_diary_file_path]._Equal(_T("")))
+	//if (m_map_diary[_diary_file_path]._Equal(_T("")))
 		InitDiary(_diary_file_path);
 
 	//3. diary_name과 일치하는 파일에서 데이터 가져오기

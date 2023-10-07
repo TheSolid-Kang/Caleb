@@ -112,7 +112,7 @@ TString CInsertPage::CreateName(int _iSelectedEvent)
 		str_buil.Append(std::to_tstring(t_tm.tm_year - 100)); //-100�� ����: 1900�⵵�����̹Ƿ� 100���� �������� �����⿡  
 		
 		//month
-		if(t_tm.tm_mon + 1 > 10)
+		if(t_tm.tm_mon + 1 >= 10)
 			str_buil.Append(std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
 		else
 			str_buil.Append(_T("0") + std::to_tstring(t_tm.tm_mon + 1));// + 1�� ����: 0 ~ 11 ���� ��޵ǹǷ� 
