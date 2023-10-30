@@ -17,7 +17,7 @@ void CTestPage::initialize(void)
 		, _T("2. 원하는 섹션 보기")
 		, _T("3. 전체 Caleb 읽고 언급횟수 확인")
 		, _T("4. Record 섹션 MSSQL DB에 넣기")
-		, _T("")
+		, _T("5. 가계부 입력")
 		, _T("99. EXIT"));
 	m_list_title.insert(m_list_title.end(), arr_note.begin(), arr_note.end());
 }
@@ -131,9 +131,10 @@ void CTestPage::init_func(void)
 				auto record = CDiaryMgr::GetInstance().GetDiarySelectedSection(_path, _T("Record"));
 				auto InDate = _T("CONVERT(DATE, '") + CFileMgr::GetFileName(_path) + _T("')");
 
-				auto oldValue = L'\'';
-				auto newValue = L'"';
-				std::replace(record.begin(), record.end(), oldValue, newValue);
+				//auto oldValue = L'\'';
+				//auto newValue = L'\'\'';
+				//std::replace(record.begin(), record.end(), oldValue, newValue);
+				record = StringEditor::ReplaceAll(record, _T("\'"), _T("\'\'"));
 				listCalebRecord[InDate] = record;
 			}
 
@@ -216,7 +217,7 @@ void CTestPage::init_func(void)
 			strBuil.Append_endl(_T("			SELECT ChurchSeq, Indate, Title, Record, Remark, LastUserSeq, LastDateTime "));
 			strBuil.Append_endl(_T("			FROM #TCDiaryInsert AS A "));
 			strBuil.Append_endl(_T(" "));
-			strBuil.Append_endl(_T("			SELECT * FROM _TCDiary ORDER BY LastDateTime DESC"));
+			strBuil.Append_endl(_T("			SELECT * FROM _TCDiary ORDER BY InDate DESC"));
 			strBuil.Append_endl(_T("		ROLLBACK TRAN "));
 			strBuil.Append_endl(_T("		--COMMIT; "));
 			strBuil.Append_endl(_T("		END "));
@@ -233,7 +234,20 @@ void CTestPage::init_func(void)
 			
 			return nullptr; }));
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FIVE)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			
+			//0. 변수초기화
+			TString path = CFileMgr::GetOpenFileDialg();
+
+
+
+
+			std::tcout << path << std::endl;
+
+
+
+
+			return nullptr; }));
 }
 
 void CTestPage::init_selected_func(void)
@@ -255,7 +269,9 @@ void CTestPage::init_selected_func(void)
 			(*m_uniq_map_func)[static_cast<size_t>(FUNC::FOUR)](nullptr);
 			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FIVE)
-		, [&](const void* _p_void) -> std::shared_ptr<void> {return nullptr; }));
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			(*m_uniq_map_func)[static_cast<size_t>(FUNC::FIVE)](nullptr);
+			return nullptr; }));
 }
 
 void CTestPage::render(void)

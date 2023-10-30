@@ -109,5 +109,23 @@ public:
 
 		return str;
 	}
+	static TString ReplaceAll(
+		__in const TString& message,
+		__in const TString& pattern,
+		__in const TString& replace
+	) {
+
+		TString result = message;
+		TString::size_type pos = 0;
+		TString::size_type offset = 0;
+
+		while ((pos = result.find(pattern, offset)) != std::string::npos)
+		{
+			result.replace(result.begin() + pos, result.begin() + pos + pattern.size(), replace);
+			offset = pos + replace.size();
+		}
+
+		return result;
+	}
 
 };
