@@ -10,6 +10,8 @@ private:
 	enum class FUNC : size_t {
 		ROOT = static_cast<size_t>(COMMON_FUNC::END)
 		, ONE = 1, TWO, THREE, FOUR, FIVE
+		, GET_DATA
+		, CREATE_QUERY
 		, END
 	};
 	enum class SELECTED_FUNC : size_t {

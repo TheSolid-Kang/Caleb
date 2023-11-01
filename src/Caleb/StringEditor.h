@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <sstream>
 #include <chrono>
+#include "StringBuilder.h"
 
 class StringEditor {
 #define DEFAULT_CAP 2048
@@ -126,6 +127,32 @@ public:
 		}
 
 		return result;
+	}
+	static TString ParseNotionDate(const TString& _strDate) {
+		TString date = ReplaceAll(_strDate, _T("년 "), _T("-"));
+		date = ReplaceAll(date, _T("월 "), _T("-"));
+		date = ReplaceAll(date, _T("일"), _T(""));
+		date = ReplaceAll(date, _T("오전"), _T(""));
+		if (TString::npos != date.find(_T("오후"))) {
+			date = ReplaceAll(date, _T("오후 "), _T(""));
+			auto vec = Split(date, _T(' '));
+			StringBuilder strBuil;
+			auto iter = vec.begin();
+			strBuil.Append((*iter++));
+			strBuil.Append(_T(" "));
+
+			auto vec2 = Split((*iter), _T(':'));
+			auto iter2 = vec2.begin();
+			int hour = std::stoi((*iter2++)) + 12;
+			strBuil.Append(ToString(hour));
+			strBuil.Append(_T(":"));
+			strBuil.Append((*iter2));
+
+			date = strBuil.str();
+		}
+
+
+		return date;
 	}
 
 };

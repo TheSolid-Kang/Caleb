@@ -131,9 +131,6 @@ void CTestPage::init_func(void)
 				auto record = CDiaryMgr::GetInstance().GetDiarySelectedSection(_path, _T("Record"));
 				auto InDate = _T("CONVERT(DATE, '") + CFileMgr::GetFileName(_path) + _T("')");
 
-				//auto oldValue = L'\'';
-				//auto newValue = L'\'\'';
-				//std::replace(record.begin(), record.end(), oldValue, newValue);
 				record = StringEditor::ReplaceAll(record, _T("\'"), _T("\'\'"));
 				listCalebRecord[InDate] = record;
 			}
@@ -233,21 +230,74 @@ void CTestPage::init_func(void)
 			
 			
 			return nullptr; }));
-	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::FIVE)
+	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::GET_DATA)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {
 			
 			//0. 변수초기화
 			TString path = CFileMgr::GetOpenFileDialg();
 
+			TString str = StringEditor::ReplaceAll(CFileMgr::ReadData(path), _T("\r"), _T(""));
+			
+			auto vec = StringEditor::Split(str, _T('\n'));
+			std::vector<TString> columnTitles = StringEditor::Split(vec[0], _T(','));
+			std::vector<std::vector<TString>> tables;
+			tables.reserve(vec.size() + 1);
 
+			KMP kmp;
+			for (int i = 1; i < vec.size(); ++i) {
+				auto line = vec[i];
+				std::vector<TString> row1 = StringEditor::Split(line, _T(','));
+				std::vector<TString> row2;
+				StringBuilder strBuil;
+				if (row1.size() == columnTitles.size()) {
+					tables.push_back(row1);
+				}
+				else{
+					//line = StringEditor::ReplaceAll(line, _T("\""), _T("\"\""));
 
+					auto iter = row1.begin();
+					auto iter_end = row1.end();
+					for (; iter != iter_end; iter++) {
+						TString data;
+						strBuil.clear();
+						if (TString::npos != (*iter).find(_T("\""))) {
+							strBuil.Append((*iter));
+							for (; TString::npos == (*++iter).find(_T("\"")); ) {
+								strBuil.Append((*iter));
+							}
+							strBuil.Append((*iter));
+							data = strBuil.str();
+						}
+						else {
+							data = (*iter);
+						}
+						row2.push_back(data);
+					}
+					tables.push_back(row2);
+				}
+			}
+
+			for (std::vector<TString>& _vec : tables) {
+				for (TString& _data : _vec) {
+					if (TString::npos != _data.find(_T("년 "))
+						&& TString::npos != _data.find(_T("월 "))
+						&& TString::npos != _data.find(_T("일"))) {
+						_data = StringEditor::ParseNotionDate(_data);
+					}
+				}
+			}
 
 			std::tcout << path << std::endl;
 
+			return std::make_shared< std::vector<std::vector<TString>>>(tables); }));
+	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::CREATE_QUERY)
+		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			auto datas = *(std::vector<std::vector<TString>>*)_p_void;
 
 
 
 			return nullptr; }));
+
 }
 
 void CTestPage::init_selected_func(void)
@@ -270,7 +320,13 @@ void CTestPage::init_selected_func(void)
 			return nullptr; }));
 	(*m_uniq_map_selected_func).emplace(std::make_pair(static_cast<size_t>(SELECTED_FUNC::FIVE)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {
-			(*m_uniq_map_func)[static_cast<size_t>(FUNC::FIVE)](nullptr);
+			auto sharDatas = (*m_uniq_map_func)[static_cast<size_t>(FUNC::GET_DATA)](nullptr);
+			auto& datas = *(std::vector<std::vector<TString>>*)sharDatas.get();
+			
+			(*m_uniq_map_func)[static_cast<size_t>(FUNC::CREATE_QUERY)](&datas);
+
+
+
 			return nullptr; }));
 }
 
