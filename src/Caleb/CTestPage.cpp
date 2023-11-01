@@ -279,23 +279,78 @@ void CTestPage::init_func(void)
 
 			for (std::vector<TString>& _vec : tables) {
 				for (TString& _data : _vec) {
+					//날짜변경
 					if (TString::npos != _data.find(_T("년 "))
 						&& TString::npos != _data.find(_T("월 "))
 						&& TString::npos != _data.find(_T("일"))) {
 						_data = StringEditor::ParseNotionDate(_data);
 					}
+					//큰따옴표 삭제
+					if (TString::npos != _data.find(_T("\""))) {
+						_data = StringEditor::ReplaceAll(_data, _T("\""), _T(""));
+					}
 				}
+
+
+
 			}
 
 			std::tcout << path << std::endl;
-
+			
 			return std::make_shared< std::vector<std::vector<TString>>>(tables); }));
+
+	/*
+	* 카테고리
+	1	헌금
+	2	전도비
+	3	교제비
+	4	적금
+	5	생활비
+	6	비상금
+	7	식비
+
+	* 쿼리 예시
+	INSERT INTO _TCFinancialLedger(ChurchSeq, History, Price, CategoryMaj, CategoryMir,InDate, LastDateTime, LastUserSeq) VALUES(1, N'주택청약','20000' ,4,1,CAST(N'2023-11-1' AS DATETIME ),CAST('2023-11-1 12:26' AS DATETIME), 2)
+
+
+	*/
 	(*m_uniq_map_func).emplace(std::make_pair(static_cast<size_t>(FUNC::CREATE_QUERY)
 		, [&](const void* _p_void) -> std::shared_ptr<void> {
+			//내역, 금액, 카테고리, 지출일자, 최종 수정일자
 			auto datas = *(std::vector<std::vector<TString>>*)_p_void;
 
+			std::map<TString, int> mapCategory;
+			mapCategory.emplace(_T("헌금"), 1);
+			mapCategory.emplace(_T("전도비"), 2);
+			mapCategory.emplace(_T("교제비"), 3);
+			mapCategory.emplace(_T("적금"), 4);
+			mapCategory.emplace(_T("생활비"), 5);
+			mapCategory.emplace(_T("비상금"), 6);
+			mapCategory.emplace(_T("식비"), 7);
 
 
+			StringBuilder strBuil;
+			strBuil.Append_endl(_T("USE [Caleb]"));
+			strBuil.Append_endl(_T("TRUNCATE TABLE[_TCFinancialLedger]"));
+			//교회 내부코드, 내역, 금액, 카테고리1,카테고리2, 지출일자, 최종수정일자, 최종수정자
+			for (auto& _vec : datas) {
+				strBuil.Append_endl(_T("INSERT INTO _TCFinancialLedger(ChurchSeq, History, Price, CategoryMaj, CategoryMir,InDate, LastDateTime, LastUserSeq) VALUES("));
+				strBuil.Append_endl(_T("1 "));
+				strBuil.Append_endl(_T(", N'") + _vec[0] + _T("'"));
+				strBuil.Append_endl(_T(", N'") + _vec[1] + _T("'"));
+				strBuil.Append_endl(_T(", 4"));
+				strBuil.Append_endl(_T(", ") + StringEditor::ToString(mapCategory[_vec[2]]) );
+				strBuil.Append_endl(_T(", CAST(N'") + _vec[3] + _T("' AS DATETIME )"));
+				strBuil.Append_endl(_T(", CAST(N'") + _vec[4] + _T("' AS DATETIME )"));
+				strBuil.Append_endl(_T(", 2)"));
+			}
+			strBuil.Append_endl(_T("SELECT * FROM _TCFinancialLedger ORDER BY InDate DESC"));
+
+
+			//3. InserQuery sql 파일 제작
+			auto savePath = CFileMgr::GetEXEFilePath() + _T("\\InserFinancialLedger.sql");
+			CFileMgr::CreateNewFile(savePath);
+			CFileMgr::WriteData(savePath, strBuil.str());
 			return nullptr; }));
 
 }

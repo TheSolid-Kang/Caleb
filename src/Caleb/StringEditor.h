@@ -144,6 +144,8 @@ public:
 			auto vec2 = Split((*iter), _T(':'));
 			auto iter2 = vec2.begin();
 			int hour = std::stoi((*iter2++)) + 12;
+			if (hour == 24)
+				hour = 12;
 			strBuil.Append(ToString(hour));
 			strBuil.Append(_T(":"));
 			strBuil.Append((*iter2));
