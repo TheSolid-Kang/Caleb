@@ -57,7 +57,7 @@ void CSettingPage::DefaultSet(void)
 	CINIMgr::WritePrivateProfileString_INI(_T("SECTION"), _T("ARR_DIARY_SECTION"), _T("Mission|Record|TheWords|Fellowship|Praise"));
 	CINIMgr::WritePrivateProfileString_INI(_T("SECTION"), _T("ARR_CALEB_SECTION"), _T("Caleb|Reason|Mission|Record"));
 	if(CINIMgr::GetPrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD")) == _T("0"))
-		CINIMgr::WritePrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"), _T("�ƹ���|�°�|���"));
+		CINIMgr::WritePrivateProfileString_INI(_T("SEARCH"), _T("ARR_KEYWORD"), _T(""));
 
 	//2. diary form 
 	auto vec_section = CDiaryMgr::GetInstance().GetVecSection();

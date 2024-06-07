@@ -1,9 +1,9 @@
 #pragma once
 #include "Headers.h"
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 #include <sstream>
 
-class CCalebMgr : public boost::noncopyable
+class CCalebMgr //: public boost::noncopyable
 {
 private:
 	CCalebMgr();

@@ -9,14 +9,15 @@ public:
 private:
 	enum class FUNC : size_t {
 		ROOT = static_cast<size_t>(COMMON_FUNC::END)
-		, ONE = 1, TWO, THREE, FOUR, FIVE
+		, ONE = 1, TWO, THREE, FOUR, FIVE, SIX
 		, GET_DATA
 		, CREATE_QUERY
+
 		, END
 	};
 	enum class SELECTED_FUNC : size_t {
 		ROOT = static_cast<size_t>(COMMON_SELECTED_FUNC::END)
-		, ONE = 1, TWO, THREE, FOUR, FIVE
+		, ONE = 1, TWO, THREE, FOUR, FIVE, SIX
 		, END
 	};
 

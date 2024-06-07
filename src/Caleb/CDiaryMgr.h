@@ -1,9 +1,9 @@
 #pragma once
 #include "Headers.h"
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 #include <sstream>
 
-class CDiaryMgr : public boost::noncopyable
+class CDiaryMgr //: public boost::noncopyable
 {
 private:
 	CDiaryMgr();

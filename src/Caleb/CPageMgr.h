@@ -1,9 +1,9 @@
 #pragma once
 #include "Headers.h"
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 
 class CPage;
-class CPageMgr : public boost::noncopyable
+class CPageMgr //: public boost::noncopyable
 {
 private:
 	CPageMgr();
